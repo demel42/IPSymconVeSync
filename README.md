@@ -60,7 +60,7 @@ Es werden folgende Variablenprofile angelegt:
 ## 6. Anhang
 
 ### GUIDs
-- Modul: `{0DCE4B6F-9176-DC9A-5502-1AF2B7573EB5}`
+- Modul: `{20EF9EEF-5E6E-F702-AAFC-86E3A39AE1E2}`
 - Instanzen:
   - ModuleTemplateDevice: `{B052AEAB-2687-02EB-DF40-74191E242A0B}`
 - Nachrichten:
