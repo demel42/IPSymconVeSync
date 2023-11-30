@@ -1,8 +1,8 @@
 {
 	"id": "{20EF9EEF-5E6E-F702-AAFC-86E3A39AE1E2}",
-	"name": "ModuleTemplate",
+	"name": "VeSync",
 	"author": "Ch. Damsky",
-	"url": "https://github.com/demel42/ModuleTenmplate.git",
+	"url": "https://github.com/demel42/IPSymconVeSync.git",
 	"compatibility": {
 		"version": "6.0"
 	},
