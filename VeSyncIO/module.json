@@ -1,0 +1,18 @@
+{
+	"id": "{0E57FA4B-B212-E8E7-715D-4F5BA30C7817}",
+	"name": "VeSync IO",
+	"type": 1,
+	"vendor": "VeSync",
+	"aliases": [
+		"VeSync I/O"
+	],
+	"parentRequirements": [],
+	"childRequirements": [
+		"{DEC26699-97AD-BBF3-1764-2E443EC8E1C4}"
+	],
+	"implemented": [
+		"{36130503-6A92-BA52-AB31-6D24AFBAA9ED}"
+	],
+	"prefix": "VeSync",
+	"url": "https://github.com/demel42/IPSymconVeSync/blob/master/README.md"
+}

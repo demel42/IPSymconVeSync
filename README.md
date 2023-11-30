@@ -24,8 +24,8 @@
 
 ### a. Installation des Moduls
 
-Im [Module Store](https://www.symcon.de/service/dokumentation/komponenten/verwaltungskonsole/module-store/) ist das Modul unter dem Suchbegriff *ModuleTemplate* zu finden.<br>
-Alternativ kann das Modul über [Module Control](https://www.symcon.de/service/dokumentation/modulreferenz/module-control/) unter Angabe der URL `https://github.com/demel42/ModuleTemplate.git` installiert werden.
+Im [Module Store](https://www.symcon.de/service/dokumentation/komponenten/verwaltungskonsole/module-store/) ist das Modul unter dem Suchbegriff *VeSync* zu finden.<br>
+Alternativ kann das Modul über [Module Control](https://www.symcon.de/service/dokumentation/modulreferenz/module-control/) unter Angabe der URL `https://github.com/demel42/VeSync.git` installiert werden.
 
 ### b. Einrichtung in IPS
 
@@ -35,7 +35,7 @@ alle Funktionen sind über _RequestAction_ der jew. Variablen ansteuerbar
 
 ## 5. Konfiguration
 
-### ModuleTemplate Device
+### VeSync Device
 
 #### Properties
 
@@ -59,11 +59,20 @@ Es werden folgende Variablenprofile angelegt:
 
 ## 6. Anhang
 
+### Verweise
+
+https://pypi.org/project/pyvesync
+https://github.com/webdjoe/pyvesync.git
+
 ### GUIDs
 - Modul: `{20EF9EEF-5E6E-F702-AAFC-86E3A39AE1E2}`
 - Instanzen:
-  - ModuleTemplateDevice: `{B052AEAB-2687-02EB-DF40-74191E242A0B}`
+  - VeSyncIO: `{0E57FA4B-B212-E8E7-715D-4F5BA30C7817}`
+  - VeSyncConfig: `{845E5FD0-C11E-6405-472A-F3E20EBC2A46}`
+  - VeSyncDevice: `{BA4E3595-F713-49CD-D25D-53813601D88E}`
 - Nachrichten:
+  - `{DEC26699-97AD-BBF3-1764-2E443EC8E1C4}`: an VeSyncIO
+  - `{36130503-6A92-BA52-AB31-6D24AFBAA9ED}`: an VeSyncConfig, VeSyncDevice
 
 ### Quellen
 
