@@ -1,12 +1,12 @@
 {
-	"id": "{B052AEAB-2687-02EB-DF40-74191E242A0B}",
-	"name": "ModuleTemplate Device",
+	"id": "{0E57FA4B-B212-E8E7-715D-4F5BA30C7817}",
+	"name": "VeSync Device",
 	"type": 3,
 	"vendor": "",
 	"aliases": [],
 	"parentRequirements": [],
 	"childRequirements": [],
 	"implemented": [],
-	"prefix": "ModuleTemplate",
-	"url": "https://github.com/demel42/ModuleTemplate/blob/master/README.md"
+	"prefix": "VeSync",
+	"url": "https://github.com/demel42/IPSymconVeSync/blob/master/README.md"
 }
