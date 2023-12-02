@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 trait VeSyncLocalLib
 {
-	public static $IS_UNAUTHORIZED = IS_EBASE + 10;
+    public static $IS_UNAUTHORIZED = IS_EBASE + 10;
     public static $IS_SERVERERROR = IS_EBASE + 11;
     public static $IS_HTTPERROR = IS_EBASE + 12;
     public static $IS_INVALIDDATA = IS_EBASE + 13;

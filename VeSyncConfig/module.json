@@ -1,0 +1,18 @@
+{
+	"id": "{845E5FD0-C11E-6405-472A-F3E20EBC2A46}",
+	"name": "VeSyncConfig",
+	"type": 4,
+	"vendor": "VeSync",
+	"aliases": [
+		"VeSync Konfigurator"
+	],
+	"parentRequirements": [
+		"{DEC26699-97AD-BBF3-1764-2E443EC8E1C4}"
+	],
+	"childRequirements": [],
+	"implemented": [
+		"{36130503-6A92-BA52-AB31-6D24AFBAA9ED}"
+	],
+	"prefix": "VeSync",
+	"url": "https://github.com/demel42/IPSymconVeSync/blob/main/README.md"
+}

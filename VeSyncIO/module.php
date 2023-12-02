@@ -16,6 +16,8 @@ class VeSyncIO extends IPSModule
 
     private static $deviceList_endpoint = '/cloud/v2/deviceManaged/devices';
 
+    private static $bypassV2_endpoint = '/cloud/v2/deviceManaged/bypassV2';
+
     private static $appVersion = '2.8.6';
 
     private static $phoneBrand = 'SM N9005';
@@ -27,6 +29,7 @@ class VeSyncIO extends IPSModule
 
     private static $timeZone = 'Europe/Berlin';
     private static $acceptLanguage = 'de';
+    private static $deviceRegion = 'EU';
 
     private static $login_interval = 60 * 60;
 
@@ -306,6 +309,12 @@ class VeSyncIO extends IPSModule
         $ret = '';
         if (isset($jdata['Function'])) {
             switch ($jdata['Function']) {
+                case 'GetDevices':
+                    $ret = $this->GetDevices();
+                    break;
+                case 'CallBypassV2':
+                    $ret = $this->CallBypassV2($jdata['cid'], $jdata['configModule'], $jdata['payload']);
+                    break;
                 default:
                     $this->SendDebug(__FUNCTION__, 'unknown function "' . $jdata['Function'] . '"', 0);
                     break;
@@ -351,7 +360,7 @@ class VeSyncIO extends IPSModule
         $this->SendDebug(__FUNCTION__, 'http-' . $mode . ', url=' . $url, 0);
         $this->SendDebug(__FUNCTION__, '... header=' . print_r($header, true), 0);
         if ($postfields != '') {
-            $this->SendDebug(__FUNCTION__, '... postfields=' . json_encode($postfields), 0);
+            $this->SendDebug(__FUNCTION__, '... postfields=' . print_r($postfields, true), 0);
         }
 
         $time_start = microtime(true);
@@ -361,7 +370,7 @@ class VeSyncIO extends IPSModule
         curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
         if ($postfields != '') {
             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'POST');
-            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($postfields));
+            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($postfields, JSON_FORCE_OBJECT));
         }
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -406,16 +415,23 @@ class VeSyncIO extends IPSModule
             }
         }
         if ($statuscode == 0) {
-            if ($cdata == 'Token expires') {
-                $this->WriteAttributeString('AccessData', '');
-                $statuscode = self::$IS_UNAUTHORIZED;
-            }
-        }
-        if ($statuscode == 0) {
             $jdata = json_decode($cdata, true);
             if ($jdata == '') {
                 $statuscode = self::$IS_INVALIDDATA;
                 $err = 'malformed response';
+            }
+        }
+        if ($statuscode == 0) {
+            $code = $this->GetArrayElem($jdata, 'code', 0);
+            if ($code != 0) {
+                $msg = $this->GetArrayElem($jdata, 'msg', '');
+                $this->SendDebug(__FUNCTION__, 'code=' . $code . ', msg=' . $msg, 0);
+                if ($msg == 'the token has expired') {
+                    $statuscode = self::$IS_UNAUTHORIZED;
+                } else {
+                    $statuscode = self::$IS_INVALIDDATA;
+                }
+                $this->WriteAttributeString('AccessData', '');
             }
         }
         $this->ApiCallsCollect($url, $err, $statuscode);
@@ -468,21 +484,11 @@ class VeSyncIO extends IPSModule
 
         $jdata = $this->do_HttpRequest(self::$login_endpoint, $postfields, '', '');
         if ($jdata == false) {
-            $this->WriteAttributeString('AccessData', '');
             IPS_SemaphoreLeave($this->SemaphoreID);
             return false;
         }
 
         $this->SendDebug(__FUNCTION__, 'jdata=' . print_r($jdata, true), 0);
-
-        $code = $this->GetArrayElem($jdata, 'code', 0);
-        if ($code != 0) {
-            $msg = $this->GetArrayElem($jdata, 'msg', 0);
-            $this->SendDebug(__FUNCTION__, 'code=' . $code . ', msg=' . $msg, 0);
-            $this->WriteAttributeString('AccessData', '');
-            IPS_SemaphoreLeave($this->SemaphoreID);
-            return false;
-        }
 
         $token = $this->GetArrayElem($jdata, 'result.token', '');
         $accountID = $this->GetArrayElem($jdata, 'result.accountID', '');
@@ -578,5 +584,44 @@ class VeSyncIO extends IPSModule
         $devices = $this->GetArrayElem($jdata, 'result.list', '');
         $this->SendDebug(__FUNCTION__, 'devices=' . print_r($devices, true), 0);
         return json_encode($devices);
+    }
+
+    private function CallBypassV2($cid, $configModule, $payload)
+    {
+        $access_data = $this->GetAccessData();
+        if ($access_data == false) {
+            return false;
+        }
+
+        $url = self::$bypassV2_endpoint;
+
+        $postfields = [
+            'appVersion'     => self::$appVersion,
+            'phoneBrand'     => self::$phoneBrand,
+            'phoneOS'        => self::$phoneOS,
+            'timeZone'       => self::$timeZone,
+            'acceptLanguage' => self::$acceptLanguage,
+            'traceId'        => time(),
+            'token'          => $access_data['token'],
+            'accountID'      => $access_data['accountID'],
+            'cid'            => $cid,
+            'configModule'   => $configModule,
+            'deviceRegion'   => self::$deviceRegion,
+            'method'         => 'bypassV2',
+            'payload'        => json_decode($payload),
+        ];
+
+        if (IPS_SemaphoreEnter($this->SemaphoreID, self::$semaphoreTM) == false) {
+            $this->SendDebug(__FUNCTION__, 'unable to lock sempahore ' . $this->SemaphoreID, 0);
+            return;
+        }
+        $jdata = $this->do_HttpRequest($url, $postfields, '', '');
+        IPS_SemaphoreLeave($this->SemaphoreID);
+        if ($jdata == false) {
+            return false;
+        }
+        $result = $this->GetArrayElem($jdata, 'result.result', '');
+        $this->SendDebug(__FUNCTION__, 'result=' . print_r($result, true), 0);
+        return json_encode($result);
     }
 }

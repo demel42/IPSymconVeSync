@@ -1,0 +1,32 @@
+{
+	"translations": {
+		"de": {
+			"VeSync Device": "VeSync Gerät",
+
+			"__function__": "CheckUpdate",
+
+			"__elements__": "",
+			"Disable instance": "Instanz deaktivieren",
+
+			"Basic configuration": "Basis-Konfiguration",
+			"Model": "Modell",
+			"Type": "Typ",
+			"Device-ID": "Geräte-ID",
+
+			"Update interval": "Aktualisierungsintervall",
+			"Seconds": "Sekunden",
+
+			"Generate message when the gateway is inactive": "Meldung erzeugen wenn der Gateway inaktiv ist",
+
+			"__messages__": "",
+			"Instance has no active gateway": "Instanz hat keinen aktiven Gateway",
+
+			"__variables__": "",
+
+			"__actions__": "",
+			"Update status": "Aktualisiere Status",
+
+			"__end__": ""
+		}
+	}
+}
