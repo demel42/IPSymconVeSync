@@ -108,7 +108,6 @@ class VeSyncConfig extends IPSModule
                 $deviceName = $this->GetArrayElem($device, 'deviceName', '');
                 $deviceType = $this->GetArrayElem($device, 'deviceType', '');
                 $cid = $this->GetArrayElem($device, 'cid', '');
-                $uuid = $this->GetArrayElem($device, 'uuid', '');
                 $configModule = $this->GetArrayElem($device, 'configModule', '');
 
                 $instanceID = 0;
@@ -124,21 +123,23 @@ class VeSyncConfig extends IPSModule
                     continue;
                 }
 
+                $model = $this->DeviceType2Model($deviceType);
+
                 $entry = [
-                    'instanceID' => $instanceID,
-                    'name'       => $deviceName,
-                    'type'       => $deviceType,
-                    'cid'        => $cid,
-                    'uuid'       => $uuid,
-                    'create'     => [
+                    'instanceID'  => $instanceID,
+                    'name'        => $deviceName,
+                    'cid'         => $cid,
+                    'type'        => $deviceType,
+                    'model'       => $model,
+                    'create'      => [
                         'moduleID'      => $guid,
                         'location'      => $this->GetConfiguratorLocation($catID),
                         'info'          => $deviceType,
                         'configuration' => [
-                            'uuid'         => $uuid,
                             'cid'          => $cid,
-                            'configModule' => $configModule,
                             'deviceType'   => $deviceType,
+                            'configModule' => $configModule,
+                            'model'        => $model,
                         ],
                     ],
                 ];
@@ -164,17 +165,17 @@ class VeSyncConfig extends IPSModule
             }
 
             $name = IPS_GetName($instID);
-            $deviceType = IPS_GetProperty($instID, 'deviceType');
-            $configModule = IPS_GetProperty($instID, 'configModule');
             $cid = IPS_GetProperty($instID, 'cid');
-            $uuid = IPS_GetProperty($instID, 'uuid');
+            $configModule = IPS_GetProperty($instID, 'configModule');
+            $deviceType = IPS_GetProperty($instID, 'deviceType');
+            $model = IPS_GetProperty($instID, 'model');
 
             $entry = [
                 'instanceID'  => $instID,
                 'name'        => $name,
-                'type'        => $deviceType,
                 'cid'         => $cid,
-                'uuid'        => $uuid,
+                'type'        => $deviceType,
+                'model'       => $model,
             ];
 
             $entries[] = $entry;
@@ -213,12 +214,17 @@ class VeSyncConfig extends IPSModule
                     'width'   => 'auto'
                 ],
                 [
-                    'caption' => 'Type',
+                    'caption' => 'Model',
+                    'name'    => 'model',
+                    'width'   => '200px'
+                ],
+                [
+                    'caption' => 'Device type',
                     'name'    => 'type',
                     'width'   => '250px'
                 ],
                 [
-                    'caption' => 'Device-ID',
+                    'caption' => 'Device ID',
                     'name'    => 'cid',
                     'width'   => '350px'
                 ],

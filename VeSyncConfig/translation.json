@@ -8,9 +8,9 @@
 
 			"Devices": "Geräte",
 			"Name": "Bezeichnung",
-			"Type": "Typ",
 			"Model": "Modell",
-			"Device-ID": "Geräte-ID",
+			"Device type": "Geräte-Typ",
+			"Device ID": "Geräte-ID",
 
 			"__end__": ""
 		}

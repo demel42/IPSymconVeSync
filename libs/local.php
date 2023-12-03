@@ -52,5 +52,29 @@ trait VeSyncLocalLib
         if ($reInstall) {
             $this->SendDebug(__FUNCTION__, 'reInstall=' . $this->bool2str($reInstall), 0);
         }
+
+        $this->CreateVarProfile('VeSync.Wifi', VARIABLETYPE_INTEGER, ' dBm', 0, 0, 0, 0, 'Intensity', '', $reInstall);
+    }
+
+    private function DeviceType2Model($deviceType)
+    {
+        $map = [
+            'Core200S'   => ['Core200S', 'LAP-C201S-AUSR', 'LAP-C202S-WUSR'],
+            'Core300S'   => ['Core300S', 'LAP-C301S-WJP', 'LAP-C302S-WUSB'],
+            'Core400S'   => ['Core400S', 'LAP-C401S-WJP', 'LAP-C401S-WAAA', 'LAP-C401S-WUSR'],
+            'Core600S'   => ['Core600S', 'LAP-C601S-WEU', 'LAP-C601S-WUS', 'LAP-C601S-WUSR'],
+            // 'LV-PUR131S' => ['LV-PUR131S', 'LV-RH131S'],
+            'Vital100S'  => ['LAP-V102S-AASR', 'LAP-V102S-AUSR', 'LAP-V102S-WEU', 'LAP-V102S-WJP', 'LAP-V102S-WUS'],
+            'Vital200S'  => ['LAP-V201-AUSR', 'LAP-V201S-AASR', 'LAP-V201S-WEU', 'LAP-V201S-WJP', 'LAP-V201S-WUS'],
+        ];
+
+        foreach ($map as $model => $types) {
+            if (in_array($deviceType, $types)) {
+                return $model;
+            }
+        }
+
+        $this->SendDebug(__FUNCTION__, 'unknown model "' . $model . '"', 0);
+        return false;
     }
 }

@@ -10,8 +10,10 @@
 
 			"Basic configuration": "Basis-Konfiguration",
 			"Model": "Modell",
-			"Type": "Typ",
-			"Device-ID": "Geräte-ID",
+			"Device id": "Geräte-ID",
+			"cid": "cid",
+			"deviceType": "deviceType",
+			"configModule": "configModule",
 
 			"Update interval": "Aktualisierungsintervall",
 			"Seconds": "Sekunden",
@@ -22,6 +24,9 @@
 			"Instance has no active gateway": "Instanz hat keinen aktiven Gateway",
 
 			"__variables__": "",
+			"Last update": "letzte Aktualisierung",
+			"Power": "Zustand",
+			"Wifi signal strenght": "Wifi Signalstärke",
 
 			"__actions__": "",
 			"Update status": "Aktualisiere Status",

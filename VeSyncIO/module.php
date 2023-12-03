@@ -312,6 +312,9 @@ class VeSyncIO extends IPSModule
                 case 'GetDevices':
                     $ret = $this->GetDevices();
                     break;
+                case 'GetDeviceDetails':
+                    $ret = $this->GetDeviceDetails($jdata['cid']);
+                    break;
                 case 'CallBypassV2':
                     $ret = $this->CallBypassV2($jdata['cid'], $jdata['configModule'], $jdata['payload']);
                     break;
@@ -361,6 +364,7 @@ class VeSyncIO extends IPSModule
         $this->SendDebug(__FUNCTION__, '... header=' . print_r($header, true), 0);
         if ($postfields != '') {
             $this->SendDebug(__FUNCTION__, '... postfields=' . print_r($postfields, true), 0);
+            $this->SendDebug(__FUNCTION__, '... postdata=' . json_encode($postfields, JSON_FORCE_OBJECT), 0);
         }
 
         $time_start = microtime(true);
@@ -434,12 +438,17 @@ class VeSyncIO extends IPSModule
                 $this->WriteAttributeString('AccessData', '');
             }
         }
+
         $this->ApiCallsCollect($url, $err, $statuscode);
+
         if ($statuscode) {
             $this->SendDebug(__FUNCTION__, '    statuscode=' . $statuscode . ', err=' . $err, 0);
             $this->MaintainStatus($statuscode);
             return false;
         }
+
+        $this->MaintainStatus(IS_ACTIVE);
+
         return $jdata;
     }
 
@@ -455,6 +464,10 @@ class VeSyncIO extends IPSModule
             $jaccess_data = json_decode($access_data, true);
             $token = isset($jaccess_data['token']) ? $jaccess_data['token'] : '';
             $expireѕ = isset($jaccess_data['expireѕ']) ? $jaccess_data['expireѕ'] : 0;
+            if ($expireѕ < time()) {
+                $this->SendDebug(__FUNCTION__, 'access_token expired', 0);
+                $token = '';
+            }
             if ($token != '') {
                 $this->SendDebug(__FUNCTION__, 'token=' . $token . ', valid until ' . date('d.m.y H:i:s', $expireѕ), 0);
                 IPS_SemaphoreLeave($this->SemaphoreID);
@@ -586,6 +599,23 @@ class VeSyncIO extends IPSModule
         return json_encode($devices);
     }
 
+    private function GetDeviceDetails($cid)
+    {
+        $this->SendDebug(__FUNCTION__, 'cid=' . $cid, 0);
+        $devices = $this->GetDevices();
+        if ($devices == false) {
+            return false;
+        }
+        $devices = json_decode($devices, true);
+        foreach ($devices as $device) {
+            if ($device['cid'] == $cid) {
+                $this->SendDebug(__FUNCTION__, 'device=' . print_r($device, true), 0);
+                return json_encode($device);
+            }
+        }
+        return false;
+    }
+
     private function CallBypassV2($cid, $configModule, $payload)
     {
         $access_data = $this->GetAccessData();
@@ -620,7 +650,7 @@ class VeSyncIO extends IPSModule
         if ($jdata == false) {
             return false;
         }
-        $result = $this->GetArrayElem($jdata, 'result.result', '');
+        $result = (array) $this->GetArrayElem($jdata, 'result.result', []);
         $this->SendDebug(__FUNCTION__, 'result=' . print_r($result, true), 0);
         return json_encode($result);
     }

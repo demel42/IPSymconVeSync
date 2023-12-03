@@ -30,10 +30,11 @@ class VeSyncDevice extends IPSModule
 
         $this->RegisterPropertyBoolean('log_no_parent', true);
 
-        $this->RegisterPropertyString('uuid', '');
         $this->RegisterPropertyString('cid', '');
         $this->RegisterPropertyString('deviceType', '');
         $this->RegisterPropertyString('configModule', '');
+
+        $this->RegisterPropertyString('model', '');
 
         $this->RegisterPropertyInteger('update_interval', 60);
 
@@ -94,7 +95,21 @@ class VeSyncDevice extends IPSModule
             return;
         }
 
-        $vpos = 0;
+        $model = $this->ReadPropertyString('model');
+        $options = $this->model2options($model);
+
+        $this->SendDebug(__FUNCTION__, 'option=' . print_r($options, true), 0);
+
+        $vpos = 1;
+
+        $this->MaintainVariable('Power', $this->Translate('Power'), VARIABLETYPE_BOOLEAN, '~Switch', $vpos++, $options['power']);
+        if ($options['power']) {
+            $this->MaintainAction('Power', true);
+        }
+
+        $this->MaintainVariable('WifiStrength', $this->Translate('Wifi signal strenght'), VARIABLETYPE_INTEGER, 'VeSync.Wifi', $vpos++, $options['rssi']);
+
+        $this->MaintainVariable('LastUpdate', $this->Translate('Last update'), VARIABLETYPE_INTEGER, '~UnixTimestamp', $vpos++, true);
 
         $module_disable = $this->ReadPropertyBoolean('module_disable');
         if ($module_disable) {
@@ -103,17 +118,8 @@ class VeSyncDevice extends IPSModule
             return;
         }
 
-        /*
-        $s = '';
-        $guid = $this->ReadPropertyString('guid');
-        if ($guid != '') {
-            $r = explode('+', $guid);
-            if (is_array($r) && count($r) == 2) {
-                $s = $r[0] . '(#' . $r[1] . ')';
-            }
-        }
-        $this->SetSummary($s);
-         */
+        $model = $this->ReadPropertyString('model');
+        $this->SetSummary($model);
 
         $this->MaintainStatus(IS_ACTIVE);
 
@@ -144,31 +150,36 @@ class VeSyncDevice extends IPSModule
             'items'   => [
                 [
                     'type'    => 'ValidationTextBox',
-                    'name'    => 'uuid',
-                    'width'   => '350px',
-                    'caption' => 'UUID',
-                    'enabled' => false
-                ],
-                [
-                    'type'    => 'ValidationTextBox',
                     'name'    => 'cid',
                     'width'   => '350px',
-                    'caption' => 'CID',
+                    'caption' => 'cid',
                     'enabled' => false
                 ],
                 [
-                    'type'    => 'ValidationTextBox',
-                    'name'    => 'deviceType',
-                    'width'   => '350px',
-                    'caption' => 'Model',
-                    'enabled' => false
-                ],
-                [
-                    'type'    => 'ValidationTextBox',
-                    'name'    => 'configModule',
-                    'width'   => '350px',
-                    'caption' => 'Type',
-                    'enabled' => false
+                    'type'    => 'RowLayout',
+                    'items'   => [
+                        [
+                            'type'    => 'ValidationTextBox',
+                            'name'    => 'model',
+                            'width'   => '350px',
+                            'caption' => 'Model',
+                            'enabled' => false
+                        ],
+                        [
+                            'type'    => 'ValidationTextBox',
+                            'name'    => 'deviceType',
+                            'width'   => '350px',
+                            'caption' => 'deviceType',
+                            'enabled' => false
+                        ],
+                        [
+                            'type'    => 'ValidationTextBox',
+                            'name'    => 'configModule',
+                            'width'   => '350px',
+                            'caption' => 'configModule',
+                            'enabled' => false
+                        ],
+                    ],
                 ],
             ],
         ];
@@ -243,6 +254,107 @@ class VeSyncDevice extends IPSModule
         $this->MaintainTimer('UpdateStatus', $sec * 1000);
     }
 
+    private function model2options($model)
+    {
+        $options['rssi'] = false;
+        $options['power'] = false;
+
+        switch ($model) {
+            case 'Vital100S':
+                $options['power'] = true;
+                $options['rssi'] = true;
+                break;
+            default:
+                $this->SendDebug(__FUNCTION__, 'unsupported model ' . $model, 0);
+                break;
+        }
+        return $options;
+    }
+
+    private function CallBypassV2(string $method, array $opts = null)
+    {
+        switch ($method) {
+            case 'getPurifierStatus':
+                $data = [];
+                break;
+            case 'setSwitch':
+                $data = [
+                    'powerSwitch'    => $opts['value'],
+                    'switchIdx'      => 0,
+                ];
+                break;
+            default:
+                $this->SendDebug(__FUNCTION__, 'unknown method=' . $method, 0);
+                return false;
+        }
+
+        $payload = [
+            'method' => $method,
+            'data'   => $data,
+            'source' => 'APP',
+        ];
+
+        $cid = $this->ReadPropertyString('cid');
+        $configModule = $this->ReadPropertyString('configModule');
+
+        $sdata = [
+            'DataID'           => '{DEC26699-97AD-BBF3-1764-2E443EC8E1C4}',
+            'CallerID'         => $this->InstanceID,
+            'Function'         => 'CallBypassV2',
+            'cid'              => $cid,
+            'configModule'     => $configModule,
+            'payload'          => json_encode($payload),
+        ];
+        $this->SendDebug(__FUNCTION__, 'SendDataToParent(' . print_r($sdata, true) . ')', 0);
+        $data = $this->SendDataToParent(json_encode($sdata));
+        $jdata = json_decode($data, true);
+        $this->SendDebug(__FUNCTION__, 'jdata=' . print_r($jdata, true), 0);
+
+        return $jdata;
+    }
+
+    private function GetDeviceStatus()
+    {
+        $model = $this->ReadPropertyString('model');
+        switch ($model) {
+            case 'Vital100S':
+                $jdata = $this->CallBypassV2('getPurifierStatus');
+                break;
+            default:
+                $jdata = false;
+                $this->SendDebug(__FUNCTION__, 'unsupported model ' . $model, 0);
+                break;
+        }
+        return $jdata;
+    }
+
+    private function GetDeviceDetails()
+    {
+        $cid = $this->ReadPropertyString('cid');
+
+        $model = $this->ReadPropertyString('model');
+        switch ($model) {
+            case 'Vital100S':
+                $sdata = [
+                    'DataID'           => '{DEC26699-97AD-BBF3-1764-2E443EC8E1C4}',
+                    'CallerID'         => $this->InstanceID,
+                    'Function'         => 'GetDeviceDetails',
+                    'cid'              => $cid,
+                ];
+                $this->SendDebug(__FUNCTION__, 'SendDataToParent(' . print_r($sdata, true) . ')', 0);
+                $data = $this->SendDataToParent(json_encode($sdata));
+                $jdata = json_decode($data, true);
+                $this->SendDebug(__FUNCTION__, 'jdata=' . print_r($jdata, true), 0);
+                break;
+            default:
+                $jdata = false;
+                $this->SendDebug(__FUNCTION__, 'unsupported model ' . $model, 0);
+                break;
+        }
+
+        return $jdata;
+    }
+
     private function UpdateStatus()
     {
         if ($this->CheckStatus() == self::$STATUS_INVALID) {
@@ -259,29 +371,20 @@ class VeSyncDevice extends IPSModule
             return;
         }
 
-        $cid = $this->ReadPropertyString('cid');
-        $configModule = $this->ReadPropertyString('configModule');
+        $now = time();
+        $is_changed = false;
 
-        $payload = [
-            'method' => 'getPurifierStatus',
-            'data'   => [],
-            'source' => 'APP',
-        ];
+        $jdata = $this->GetDeviceStatus();
 
-        $sdata = [
-            'DataID'           => '{DEC26699-97AD-BBF3-1764-2E443EC8E1C4}',
-            'CallerID'         => $this->InstanceID,
-            'Function'         => 'CallBypassV2',
-            'cid'              => $cid,
-            'configModule'     => $configModule,
-            'payload'          => json_encode($payload),
-        ];
-        $this->SendDebug(__FUNCTION__, 'SendDataToParent(' . print_r($sdata, true) . ')', 0);
-        $data = $this->SendDataToParent(json_encode($sdata));
-        $jdata = json_decode($data, true);
-        $this->SendDebug(__FUNCTION__, 'jdata=' . print_r($jdata, true), 0);
+        $powerSwitch = (bool) $this->GetArrayElem($jdata, 'powerSwitch', false);
+        $this->SaveValue('Power', $powerSwitch, $is_changed);
 
-        // $this->SetValue('LastUpdate', $now);
+        $jdata = $this->GetDeviceDetails();
+
+        $rssi = (int) $this->GetArrayElem($jdata, 'deviceProp.wifiRssi', false, $fnd);
+        $this->SaveValue('WifiStrength', $rssi, $is_changed);
+
+        $this->SetValue('LastUpdate', $now);
 
         $this->AdjustActions();
 
@@ -320,6 +423,10 @@ class VeSyncDevice extends IPSModule
 
         $r = false;
         switch ($ident) {
+            case 'Power':
+                $r = $this->SwitchPower((bool) $value);
+                $this->SendDebug(__FUNCTION__, $ident . '=' . $value . ' => ret=' . $r, 0);
+                break;
             default:
                 $this->SendDebug(__FUNCTION__, 'invalid ident ' . $ident, 0);
                 break;
@@ -342,4 +449,73 @@ class VeSyncDevice extends IPSModule
             $this->ReloadForm();
         }
     }
+
+    private function SwitchPower(bool $mode)
+    {
+        if (!$this->checkAction(__FUNCTION__, true)) {
+            return false;
+        }
+
+        $model = $this->ReadPropertyString('model');
+        switch ($model) {
+            case 'Vital100S':
+                $opts = [
+                    'value' => (int) $mode,
+                ];
+                $jdata = $this->CallBypassV2('setSwitch', $opts);
+                $r = $jdata != json_encode([]);
+                $this->SendDebug(__FUNCTION__, 'jdata=' . print_r($jdata, true) . ', r=' . $this->bool2str($r), 0);
+                break;
+            default:
+                $r = false;
+                $this->SendDebug(__FUNCTION__, 'unsupported model ' . $model, 0);
+                break;
+        }
+        return $r;
+    }
 }
+
+/*
+03.12.2023, 11:41:48 |         CallBypassV2 | jdata=Array
+(
+    [powerSwitch] => 0
+    [filterLifePercent] => 100
+    [workMode] => manual
+    [manualSpeedLevel] => 1
+    [fanSpeedLevel] => 255
+    [AQLevel] => 1
+    [PM25] => 1
+    [screenState] => 0
+    [childLockSwitch] => 0
+    [screenSwitch] => 1
+    [lightDetectionSwitch] => 1
+    [environmentLightState] => 0
+    [autoPreference] => Array
+        (
+            [autoPreferenceType] => default
+            [roomSize] => 0
+        )
+
+    [scheduleCount] => 0
+    [timerRemain] => 0
+    [efficientModeTimeRemain] => 0
+    [sleepPreference] => Array
+        (
+            [sleepPreferenceType] => default
+            [cleaningBeforeBedSwitch] => 1
+            [cleaningBeforeBedSpeedLevel] => 3
+            [cleaningBeforeBedMinutes] => 5
+            [whiteNoiseSleepAidSwitch] => 1
+            [whiteNoiseSleepAidSpeedLevel] => 1
+            [whiteNoiseSleepAidMinutes] => 45
+            [duringSleepSpeedLevel] => 5
+            [duringSleepMinutes] => 480
+            [afterWakeUpPowerSwitch] => 1
+            [afterWakeUpWorkMode] => auto
+            [afterWakeUpFanSpeedLevel] => 1
+        )
+
+    [errorCode] => 0
+)
+
+ */
