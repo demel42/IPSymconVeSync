@@ -24,9 +24,14 @@
 			"Instance has no active gateway": "Instanz hat keinen aktiven Gateway",
 
 			"__variables__": "",
+			"Detection of ambient light": "Erkennen von Umgebungslicht",
+			"Display": "Bildschirm",
+			"Filter lifetime": "Filterlebensdauer",
 			"Last update": "letzte Aktualisierung",
 			"Power": "Zustand",
+			"Speed level": "Lüfterstufe",
 			"Wifi signal strenght": "Wifi Signalstärke",
+			"Work mode": "Betriebsmodus",
 
 			"__actions__": "",
 			"Update status": "Aktualisiere Status",

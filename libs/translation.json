@@ -8,6 +8,17 @@
 			"Instance is inactive (invalid data)": "Instanz ist inaktiv (ungültige Daten)",
 			"Instance is inactive (not logged in)": "Instanz ist inaktiv (nicht angemeldet)",
 
+			"__variableprofile__": "VeSync.OnOff",
+			"On": "Ein",
+			"Off": "Aus",
+
+			"__variableprofile__": "VeSync.WorkMode",
+			"Off": "Aus",
+			"Manual": "manuell",
+			"Auto": "automatisch",
+			"Sleep": "Schlaf",
+			"Pet": "Haustier",
+
 			"__end__": ""
 		}
 	}

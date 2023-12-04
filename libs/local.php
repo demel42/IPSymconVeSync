@@ -27,6 +27,13 @@ trait VeSyncLocalLib
     public static $STATUS_VALID = 1;
     public static $STATUS_RETRYABLE = 2;
 
+    public static $MODE_FAN_UNKNOWN = -1;
+    public static $MODE_FAN_OFF = 0;
+    public static $MODE_FAN_MANUAL = 1;
+    public static $MODE_FAN_AUTO = 2;
+    public static $MODE_FAN_SLEEP = 3;
+    public static $MODE_FAN_PET = 4;
+
     private function CheckStatus()
     {
         switch ($this->GetStatus()) {
@@ -53,7 +60,35 @@ trait VeSyncLocalLib
             $this->SendDebug(__FUNCTION__, 'reInstall=' . $this->bool2str($reInstall), 0);
         }
 
+        $associations = [
+            ['Wert' => false, 'Name' => $this->Translate('Off'), 'Farbe' => -1],
+            ['Wert' => true, 'Name' => $this->Translate('On'), 'Farbe' => -1],
+        ];
+        $this->CreateVarProfile('VeSync.OnOff', VARIABLETYPE_BOOLEAN, '', 0, 0, 0, 0, '', $associations, $reInstall);
+
         $this->CreateVarProfile('VeSync.Wifi', VARIABLETYPE_INTEGER, ' dBm', 0, 0, 0, 0, 'Intensity', '', $reInstall);
+
+        $this->CreateVarProfile('VeSync.Percent', VARIABLETYPE_INTEGER, ' %', 0, 0, 0, 0, '', '', $reInstall);
+
+        $associations = [
+            ['Wert' => self::$MODE_FAN_OFF, 'Name' => $this->Translate('Off'), 'Farbe' => -1],
+            ['Wert' => self::$MODE_FAN_MANUAL, 'Name' => $this->Translate('Manual'), 'Farbe' => -1],
+            ['Wert' => self::$MODE_FAN_AUTO, 'Name' => $this->Translate('Auto'), 'Farbe' => -1],
+            ['Wert' => self::$MODE_FAN_SLEEP, 'Name' => $this->Translate('Sleep'), 'Farbe' => -1],
+            ['Wert' => self::$MODE_FAN_PET, 'Name' => $this->Translate('Pet'), 'Farbe' => -1],
+        ];
+        $this->CreateVarProfile('VeSync.WorkMode01234', VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, '', $associations, $reInstall);
+
+        $associations = [
+            ['Wert' => self::$MODE_FAN_OFF, 'Name' => $this->Translate('Off'), 'Farbe' => -1],
+            ['Wert' => self::$MODE_FAN_MANUAL, 'Name' => $this->Translate('Manual'), 'Farbe' => -1],
+            ['Wert' => self::$MODE_FAN_AUTO, 'Name' => $this->Translate('Auto'), 'Farbe' => -1],
+            ['Wert' => self::$MODE_FAN_SLEEP, 'Name' => $this->Translate('Sleep'), 'Farbe' => -1],
+        ];
+        $this->CreateVarProfile('VeSync.WorkMode0123', VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, '', $associations, $reInstall);
+
+        $this->CreateVarProfile('VeSync.SpeedLevel123', VARIABLETYPE_INTEGER, '', 1, 3, 0, 0, '', '', $reInstall);
+        $this->CreateVarProfile('VeSync.SpeedLevel1234', VARIABLETYPE_INTEGER, '', 1, 4, 0, 0, '', '', $reInstall);
     }
 
     private function DeviceType2Model($deviceType)
@@ -76,5 +111,31 @@ trait VeSyncLocalLib
 
         $this->SendDebug(__FUNCTION__, 'unknown model "' . $model . '"', 0);
         return false;
+    }
+
+    private function EncodeWorkMode(int $mode)
+    {
+        $map = [
+            self::$MODE_FAN_OFF    => 'off',
+            self::$MODE_FAN_MANUAL => 'manual',
+            self::$MODE_FAN_AUTO   => 'auto',
+            self::$MODE_FAN_SLEEP  => 'sleep',
+            self::$MODE_FAN_PET    => 'pet',
+        ];
+
+        return isset($map[$mode]) ? $map[$mode] : '';
+    }
+
+    private function DecodeWorkMode(string $mode)
+    {
+        $map = [
+            'off'    => self::$MODE_FAN_OFF,
+            'manual' => self::$MODE_FAN_MANUAL,
+            'auto'   => self::$MODE_FAN_AUTO,
+            'sleep'  => self::$MODE_FAN_SLEEP,
+            'pet'    => self::$MODE_FAN_PET,
+        ];
+
+        return isset($map[$mode]) ? $map[$mode] : self::$MODE_FAN_UNKNOWN;
     }
 }
