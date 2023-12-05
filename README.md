@@ -19,7 +19,7 @@
 ## 2. Voraussetzungen
 
 - IP-Symcon ab Version 6.0
-- ein Dyson-Produkt, das mit der VeSync-Cloud verbunden ist
+- ein Produkt, das mit der VeSync-Cloud verbunden ist
 
 Getestet wurde das Modul bisher mit:
 
