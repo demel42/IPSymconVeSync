@@ -89,6 +89,9 @@ trait VeSyncLocalLib
 
         $this->CreateVarProfile('VeSync.SpeedLevel123', VARIABLETYPE_INTEGER, '', 1, 3, 0, 0, '', '', $reInstall);
         $this->CreateVarProfile('VeSync.SpeedLevel1234', VARIABLETYPE_INTEGER, '', 1, 4, 0, 0, '', '', $reInstall);
+
+        $this->CreateVarProfile('VeSync.PM25', VARIABLETYPE_INTEGER, ' µg/m³', 0, 0, 0, 0, 'Snow', '', $reInstall);
+        $this->CreateVarProfile('VeSync.AQLevel', VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, 'Gauge', '', $reInstall);
     }
 
     private function DeviceType2Model($deviceType)

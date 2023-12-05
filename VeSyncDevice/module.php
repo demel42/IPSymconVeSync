@@ -22,6 +22,8 @@ class VeSyncDevice extends IPSModule
         $options['display_mode'] = false;
         $options['light_detection'] = false;
         $options['filter_lifetime'] = false;
+        $options['air_quality'] = false;
+        $options['pm25'] = false;
         $options['rssi'] = false;
 
         switch ($model) {
@@ -32,6 +34,8 @@ class VeSyncDevice extends IPSModule
                 $options['display_mode'] = true;
                 $options['light_detection'] = true;
                 $options['filter_lifetime'] = true;
+                $options['air_quality'] = true;
+                $options['pm25'] = true;
                 $options['rssi'] = true;
                 break;
             default:
@@ -179,6 +183,9 @@ class VeSyncDevice extends IPSModule
         }
 
         $this->MaintainVariable('FilterLifetime', $this->Translate('Filter lifetime'), VARIABLETYPE_INTEGER, 'VeSync.Percent', $vpos++, $options['filter_lifetime']);
+
+        $this->MaintainVariable('AirQuality', $this->Translate('Indoor air quality'), VARIABLETYPE_INTEGER, 'VeSync.AQLevel', $vpos++, $options['air_quality']);
+        $this->MaintainVariable('PM25', $this->Translate('Particulate matter (PM 2.5)'), VARIABLETYPE_INTEGER, 'VeSync.PM25', $vpos++, $options['pm25']);
 
         $this->MaintainVariable('WifiStrength', $this->Translate('Wifi signal strenght'), VARIABLETYPE_INTEGER, 'VeSync.Wifi', $vpos++, $options['rssi']);
 
@@ -442,14 +449,6 @@ class VeSyncDevice extends IPSModule
             $this->SaveValue('Power', $powerSwitch, $is_changed);
         }
 
-        if ($options['filter_lifetime']) {
-            $filterLifePercent = (int) $this->GetArrayElem($jdata, 'filterLifePercent', 0, $fnd);
-            if ($fnd) {
-                $this->SendDebug(__FUNCTION__, '... FilterLifetime (filterLifePercent)=' . $filterLifePercent, 0);
-                $this->SaveValue('FilterLifetime', $filterLifePercent, $is_changed);
-            }
-        }
-
         if ($options['work_mode']) {
             $workMode = $this->GetArrayElem($jdata, 'workMode', '', $fnd);
             if ($fnd) {
@@ -480,6 +479,30 @@ class VeSyncDevice extends IPSModule
             if ($fnd) {
                 $this->SendDebug(__FUNCTION__, '... SpeedLevel (lightDetectionSwitch)=' . $speedLevel, 0);
                 $this->SaveValue('LightDetection', $lightDetectionSwitch, $is_changed);
+            }
+        }
+
+        if ($options['filter_lifetime']) {
+            $filterLifePercent = (int) $this->GetArrayElem($jdata, 'filterLifePercent', 0, $fnd);
+            if ($fnd) {
+                $this->SendDebug(__FUNCTION__, '... FilterLifetime (filterLifePercent)=' . $filterLifePercent, 0);
+                $this->SaveValue('FilterLifetime', $filterLifePercent, $is_changed);
+            }
+        }
+
+        if ($options['air_quality']) {
+            $AQLevel = (int) $this->GetArrayElem($jdata, 'AQLevel', 0, $fnd);
+            if ($fnd) {
+                $this->SendDebug(__FUNCTION__, '... AirQuality (AQLevel)=' . $AQLevel, 0);
+                $this->SaveValue('AirQuality', $AQLevel, $is_changed);
+            }
+        }
+
+        if ($options['pm25']) {
+            $PM25 = (int) $this->GetArrayElem($jdata, 'PM25', 0, $fnd);
+            if ($fnd) {
+                $this->SendDebug(__FUNCTION__, '... PM25 (PM25)=' . $PM25, 0);
+                $this->SaveValue('PM25', $PM25, $is_changed);
             }
         }
 
@@ -711,66 +734,3 @@ class VeSyncDevice extends IPSModule
         return $r;
     }
 }
-
-/*
-
-
-head, body = self.build_api_dict('setLightDetection')
-        body['payload']['data']['lightDetectionSwitch'] = toggle_id
-
-
-set_display(self, mode: bool) -> bool:
-        """Levoit Vital 100S/200S Set Display on/off with True/False."""
-        if mode:
-            mode_id = 1
-        else:
-            mode_id = 0
-        head, body = self.build_api_dict('setDisplay')
-        body['payload']['data'] = {
-            'screenSwitch': mode_id
-        }
-
-
-03.12.2023, 11:41:48 |         CallBypassV2 | jdata=Array
-(
-    [powerSwitch] => 0
-    [filterLifePercent] => 100
-    [workMode] => manual
-    [manualSpeedLevel] => 1
-    [fanSpeedLevel] => 255
-    [AQLevel] => 1
-    [PM25] => 1
-    [screenState] => 0
-    [childLockSwitch] => 0
-    [screenSwitch] => 1
-    [lightDetectionSwitch] => 1
-    [environmentLightState] => 0
-    [autoPreference] => Array
-        (
-            [autoPreferenceType] => default
-            [roomSize] => 0
-        )
-
-    [scheduleCount] => 0
-    [timerRemain] => 0
-    [efficientModeTimeRemain] => 0
-    [sleepPreference] => Array
-        (
-            [sleepPreferenceType] => default
-            [cleaningBeforeBedSwitch] => 1
-            [cleaningBeforeBedSpeedLevel] => 3
-            [cleaningBeforeBedMinutes] => 5
-            [whiteNoiseSleepAidSwitch] => 1
-            [whiteNoiseSleepAidSpeedLevel] => 1
-            [whiteNoiseSleepAidMinutes] => 45
-            [duringSleepSpeedLevel] => 5
-            [duringSleepMinutes] => 480
-            [afterWakeUpPowerSwitch] => 1
-            [afterWakeUpWorkMode] => auto
-            [afterWakeUpFanSpeedLevel] => 1
-        )
-
-    [errorCode] => 0
-)
-
- */

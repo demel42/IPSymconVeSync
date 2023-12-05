@@ -19,6 +19,18 @@
 ## 2. Voraussetzungen
 
 - IP-Symcon ab Version 6.0
+- ein Dyson-Produkt, das mit der VeSync-Cloud verbunden ist
+
+Getestet wurde das Modul bisher mit:
+
+| Hersteller | Bereich        | Modell |
+| :--------- | :------------- | :----- |
+| levoit     | Luftreiniger   | Vital 100S |
+
+Es sollte bei den anderen Luftreinigern von levoit recht einfach sein, diese mit aufzunehmen, bei anderen Geräten, die in VeSync integriet sind, muss eine Anschlussmöglichkeit geprüft werden.
+Bei Bedarf bitte an den Autor wenden.
+
+Das Modul basiert unter anderem auf Informationen aus dem Projekt [pyvesync](https://pypi.org/project/pyvesync).
 
 ## 3. Installation
 
@@ -35,33 +47,66 @@ alle Funktionen sind über _RequestAction_ der jew. Variablen ansteuerbar
 
 ## 5. Konfiguration
 
-### VeSync Device
+### VeSyncIO
 
 #### Properties
 
-| Eigenschaft               | Typ      | Standardwert | Beschreibung |
-| :------------------------ | :------  | :----------- | :----------- |
-| Instanz deaktivieren      | boolean  | false        | Instanz temporär deaktivieren |
-|                           |          |              | |
+| Eigenschaft            | Typ      | Standardwert | Beschreibung |
+| :--------------------- | :------  | :----------- | :----------- |
+| Instanz deaktivieren   | boolean  | false        | Instanz temporär deaktivieren |
+|                        |          |              | |
+| Zugangsdaten           |          |              | Benutzername und Passwort der VeSync-Cloud |
+
+#### Actions
+
+| Bezeichnung    | Beschreibung |
+| :------------- | :----------- |
+| Zugang testen  | Zugang zur VeSync-Cloud testen |
+
+### VeSyncConfig
+
+| Eigenschaft | Typ      | Standardwert | Beschreibung |
+| :---------- | :------  | :----------- | :----------- |
+| Kategorie   | integer  | 0            | Kategorie im Objektbaum, unter dem die Instanzen angelegt werden |
+
+### VeSyncDevice
+
+#### Properties
+
+| Eigenschaft              | Typ      | Standardwert | Beschreibung |
+| :----------------------- | :------  | :----------- | :----------- |
+| Instanz deaktivieren     | boolean  | false        | Instanz temporär deaktivieren |
+|                          |          |              | |
+| Basis-Konfiguration      |          |              | Basis-Konfiguration, gesetzt durch den Konfigurator |
+|                          |          |              | |
+| Aktualisierungsintervall | integer  | 60           | Abrufintervall in Sekunden |
 
 #### Aktionen
 
-| Bezeichnung                | Beschreibung |
-| :------------------------- | :----------- |
+| Bezeichnung         | Beschreibung |
+| :------------------ | :----------- |
+| aktualisiere Status | Geräte-Status abfragen |
 
 ### Variablenprofile
 
 Es werden folgende Variablenprofile angelegt:
 * Boolean<br>
+VeSync.OnOff
+
 * Integer<br>
-* Float<br>
-* String<br>
+VeSync.AQLevel,
+VeSync.Percent,
+VeSync.PM25,
+VeSync.SpeedLevel1234,
+VeSync.SpeedLevel123,
+VeSync.Wifi,
+VeSync.WorkMode01234,
+VeSync.WorkMode0123,
 
 ## 6. Anhang
 
-### Verweise
+### Quellen
 
-https://pypi.org/project/pyvesync
 https://github.com/webdjoe/pyvesync.git
 
 ### GUIDs
@@ -78,5 +123,5 @@ https://github.com/webdjoe/pyvesync.git
 
 ## 7. Versions-Historie
 
-- 0.9 @ dd.mm.yyyy HH:MM (beta)
+- 1.0 @ 05.12.2023 09:50
   - Initiale Version
