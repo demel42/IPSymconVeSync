@@ -26,7 +26,9 @@ class VeSyncConfig extends IPSModule
     {
         parent::Create();
 
-        $this->RegisterPropertyInteger('ImportCategoryID', 0);
+        if (IPS_GetKernelVersion() < 7.0) {
+            $this->RegisterPropertyInteger('ImportCategoryID', 0);
+        }
 
         $this->RegisterAttributeString('UpdateInfo', json_encode([]));
         $this->RegisterAttributeString('ModuleStats', json_encode([]));
@@ -41,7 +43,10 @@ class VeSyncConfig extends IPSModule
     {
         parent::ApplyChanges();
 
-        $propertyNames = ['ImportCategoryID'];
+        $propertyNames = [];
+        if (IPS_GetKernelVersion() < 7.0) {
+            $propertyNames[] = 'ImportCategoryID';
+        }
         $this->MaintainReferences($propertyNames);
 
         if ($this->CheckPrerequisites() != false) {
@@ -78,7 +83,12 @@ class VeSyncConfig extends IPSModule
             return $entries;
         }
 
-        $catID = $this->ReadPropertyInteger('ImportCategoryID');
+        if (IPS_GetKernelVersion() < 7.0) {
+            $catID = $this->ReadPropertyInteger('ImportCategoryID');
+            $location = $this->GetConfiguratorLocation($catID);
+        } else {
+            $location = '';
+        }
 
         $dataCache = $this->ReadDataCache();
         if (isset($dataCache['data']['devices'])) {
@@ -133,7 +143,7 @@ class VeSyncConfig extends IPSModule
                     'model'       => $model,
                     'create'      => [
                         'moduleID'      => $guid,
-                        'location'      => $this->GetConfiguratorLocation($catID),
+                        'location'      => $location,
                         'info'          => $deviceType,
                         'configuration' => [
                             'cid'          => $cid,
@@ -193,11 +203,13 @@ class VeSyncConfig extends IPSModule
             return $formElements;
         }
 
-        $formElements[] = [
-            'type'    => 'SelectCategory',
-            'name'    => 'ImportCategoryID',
-            'caption' => 'category for devices to be created'
-        ];
+        if (IPS_GetKernelVersion() < 7.0) {
+            $formElements[] = [
+                'type'    => 'SelectCategory',
+                'name'    => 'ImportCategoryID',
+                'caption' => 'category for devices to be created'
+            ];
+        }
 
         $entries = $this->getConfiguratorValues();
         $formElements[] = [
