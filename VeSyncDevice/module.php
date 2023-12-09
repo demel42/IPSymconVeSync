@@ -444,9 +444,11 @@ class VeSyncDevice extends IPSModule
         $jdata = $this->GetDeviceStatus();
 
         if ($options['power']) {
-            $powerSwitch = (bool) $this->GetArrayElem($jdata, 'powerSwitch', false);
-            $this->SendDebug(__FUNCTION__, '... Power (powerSwitch)=' . $powerSwitch . ' => ' . $this->bool2str($powerSwitch), 0);
-            $this->SaveValue('Power', $powerSwitch, $is_changed);
+            $powerSwitch = (bool) $this->GetArrayElem($jdata, 'powerSwitch', false, $fnd);
+            if ($fnd) {
+                $this->SendDebug(__FUNCTION__, '... Power (powerSwitch)=' . $powerSwitch . ' => ' . $this->bool2str($powerSwitch), 0);
+                $this->SaveValue('Power', $powerSwitch, $is_changed);
+            }
         }
 
         if ($options['work_mode']) {

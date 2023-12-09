@@ -432,10 +432,10 @@ class VeSyncIO extends IPSModule
                 $this->SendDebug(__FUNCTION__, 'code=' . $code . ', msg=' . $msg, 0);
                 if ($msg == 'the token has expired') {
                     $statuscode = self::$IS_UNAUTHORIZED;
-                } else {
+                    $this->WriteAttributeString('AccessData', '');
+                } elseif ($msg != 'device offline') {
                     $statuscode = self::$IS_INVALIDDATA;
                 }
-                $this->WriteAttributeString('AccessData', '');
             }
         }
 

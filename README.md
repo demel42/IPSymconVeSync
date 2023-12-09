@@ -123,5 +123,8 @@ https://github.com/webdjoe/pyvesync.git
 
 ## 7. Versions-Historie
 
+- 1.1 @ 09.12.2023 16:40
+  - Fix: ein Gerät, das nicht erreichbar ist (z.B. stromlos), wurde als HTTP-Fehler gewertet
+
 - 1.0 @ 05.12.2023 09:50
   - Initiale Version
