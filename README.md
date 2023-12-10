@@ -69,7 +69,7 @@ alle Funktionen sind über _RequestAction_ der jew. Variablen ansteuerbar
 | :---------- | :------  | :----------- | :----------- |
 | Kategorie   | integer  | 0            | Kategorie im Objektbaum, unter dem die Instanzen angelegt werden _[1]_ |
 
-_[1]_: nur bis IPS-Version 7 vorhanden, danach ist eine EInstellmöglichkeit Bestandteil des Standard-Konfigurator
+_[1]_: nur bis IPS-Version 7 vorhanden, danach ist eine Einstellmöglichkeit Bestandteil des Standard-Konfigurators
 
 ### VeSyncDevice
 
