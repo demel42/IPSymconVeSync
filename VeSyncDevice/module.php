@@ -38,6 +38,17 @@ class VeSyncDevice extends IPSModule
                 $options['pm25'] = true;
                 $options['rssi'] = true;
                 break;
+            case 'Core300S':
+                $options['power'] = true;
+                $options['work_mode0123'] = true;
+                $options['speed_level1234'] = true;
+                $options['display_mode'] = true;
+                $options['light_detection'] = true;
+                $options['filter_lifetime'] = true;
+                $options['air_quality'] = true;
+                $options['pm25'] = true;
+                $options['rssi'] = true;
+                break;
             default:
                 $this->SendDebug(__FUNCTION__, 'unsupported model ' . $model, 0);
                 break;
