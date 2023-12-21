@@ -391,6 +391,7 @@ class VeSyncDevice extends IPSModule
         $model = $this->ReadPropertyString('model');
         switch ($model) {
             case 'Vital100S':
+            case 'Core300S':
                 $jdata = $this->CallBypassV2('getPurifierStatus', ['data' => []]);
                 break;
             default:
@@ -408,6 +409,7 @@ class VeSyncDevice extends IPSModule
         $model = $this->ReadPropertyString('model');
         switch ($model) {
             case 'Vital100S':
+            case 'Core300S':
                 $sdata = [
                     'DataID'           => '{DEC26699-97AD-BBF3-1764-2E443EC8E1C4}',
                     'CallerID'         => $this->InstanceID,
@@ -620,6 +622,7 @@ class VeSyncDevice extends IPSModule
         $model = $this->ReadPropertyString('model');
         switch ($model) {
             case 'Vital100S':
+            case 'Core300S':
                 $opts = [
                     'data' => [
                         'powerSwitch' => (int) $mode,
@@ -647,6 +650,7 @@ class VeSyncDevice extends IPSModule
         $model = $this->ReadPropertyString('model');
         switch ($model) {
             case 'Vital100S':
+            case 'Core300S':
                 $opts = [
                     'data' => [
                         'workMode' => $this->EncodeWorkMode($mode),
@@ -673,6 +677,7 @@ class VeSyncDevice extends IPSModule
         $model = $this->ReadPropertyString('model');
         switch ($model) {
             case 'Vital100S':
+            case 'Core300S':
                 $opts = [
                     'data' => [
                         'levelIdx'         => 0,
@@ -704,6 +709,7 @@ class VeSyncDevice extends IPSModule
         $model = $this->ReadPropertyString('model');
         switch ($model) {
             case 'Vital100S':
+            case 'Core300S':
                 $opts = [
                     'data' => [
                         'screenSwitch' => (int) $mode,
@@ -730,6 +736,7 @@ class VeSyncDevice extends IPSModule
         $model = $this->ReadPropertyString('model');
         switch ($model) {
             case 'Vital100S':
+            case 'Core300S':
                 $opts = [
                     'data' => [
                         'lightDetectionSwitch' => (int) $mode,

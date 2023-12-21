@@ -26,6 +26,7 @@ Getestet wurde das Modul bisher mit:
 | Hersteller | Bereich        | Modell |
 | :--------- | :------------- | :----- |
 | levoit     | Luftreiniger   | Vital 100S |
+| levoit     | Luftreiniger   | Core 300S |
 
 Es sollte bei den anderen Luftreinigern von levoit recht einfach sein, diese mit aufzunehmen, bei anderen Geräten, die in VeSync integriet sind, muss eine Anschlussmöglichkeit geprüft werden.
 Bei Bedarf bitte an den Autor wenden.
@@ -125,7 +126,7 @@ https://github.com/webdjoe/pyvesync.git
 
 ## 7. Versions-Historie
 
-- 1.2 @ 20.12.2023 13:55
+- 1.2 @ 21.12.2023 12:57
   - Neu: Core300S hinzugefügt
 
 - 1.1 @ 09.12.2023 16:40
