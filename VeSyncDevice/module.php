@@ -23,6 +23,7 @@ class VeSyncDevice extends IPSModule
         $options['light_detection'] = false;
         $options['filter_lifetime'] = false;
         $options['air_quality'] = false;
+        $options['air_quality_value'] = false;
         $options['pm25'] = false;
         $options['rssi'] = false;
 
@@ -43,10 +44,9 @@ class VeSyncDevice extends IPSModule
                 $options['work_mode0123'] = true;
                 $options['speed_level1234'] = true;
                 $options['display_mode'] = true;
-                $options['light_detection'] = true;
                 $options['filter_lifetime'] = true;
                 $options['air_quality'] = true;
-                $options['pm25'] = true;
+                $options['air_quality_value'] = true;
                 $options['rssi'] = true;
                 break;
             default:
@@ -196,6 +196,7 @@ class VeSyncDevice extends IPSModule
         $this->MaintainVariable('FilterLifetime', $this->Translate('Filter lifetime'), VARIABLETYPE_INTEGER, 'VeSync.Percent', $vpos++, $options['filter_lifetime']);
 
         $this->MaintainVariable('AirQuality', $this->Translate('Indoor air quality'), VARIABLETYPE_INTEGER, 'VeSync.AQLevel', $vpos++, $options['air_quality']);
+        $this->MaintainVariable('AirQualityValue', $this->Translate('Indoor air quality value'), VARIABLETYPE_INTEGER, 'VeSync.AQValue', $vpos++, $options['air_quality_value']);
         $this->MaintainVariable('PM25', $this->Translate('Particulate matter (PM 2.5)'), VARIABLETYPE_INTEGER, 'VeSync.PM25', $vpos++, $options['pm25']);
 
         $this->MaintainVariable('WifiStrength', $this->Translate('Wifi signal strenght'), VARIABLETYPE_INTEGER, 'VeSync.Wifi', $vpos++, $options['rssi']);
@@ -456,67 +457,96 @@ class VeSyncDevice extends IPSModule
 
         $jdata = $this->GetDeviceStatus();
 
+        switch ($model) {
+            case 'Vital100S':
+                $keywords = [
+                    'power'           => 'powerSwitch',
+                    'work_mode'       => 'workMode',
+                    'speed_level'     => 'manualSpeedLevel',
+                    'display_mode'    => 'screenSwitch',
+                    'light_detection' => 'lightDetectionSwitch',
+                    'filter_lifetime' => 'filterLifePercent',
+                    'air_quality'     => 'AQLevel',
+                    'pm25'            => 'PM25',
+                ];
+                break;
+            case 'Core300S':
+                $keywords = [
+                    'power'             => 'enabled',
+                    'work_mode'         => 'mode',
+                    'speed_level'       => 'level',
+                    'display_mode'      => 'display',
+                    'filter_lifetime'   => 'filter_life',
+                    'air_quality'       => 'air_quality',
+                    'air_quality_value' => 'air_quality_value',
+                ];
+                break;
+            default:
+                $this->SendDebug(__FUNCTION__, 'unsupported model ' . $model, 0);
+                return;
+        }
+
         if ($options['power']) {
-            $powerSwitch = (bool) $this->GetArrayElem($jdata, 'powerSwitch', false, $fnd);
+            $powerSwitch = (bool) $this->GetArrayElem($jdata, $keywords['power'], false, $fnd);
             if ($fnd) {
-                $this->SendDebug(__FUNCTION__, '... Power (powerSwitch)=' . $powerSwitch . ' => ' . $this->bool2str($powerSwitch), 0);
+                $this->SendDebug(__FUNCTION__, '... Power (' . $keywords['power'] . ')=' . $powerSwitch . ' => ' . $this->bool2str($powerSwitch), 0);
                 $this->SaveValue('Power', $powerSwitch, $is_changed);
             }
         }
 
         if ($options['work_mode']) {
-            $workMode = $this->GetArrayElem($jdata, 'workMode', '', $fnd);
+            $workMode = $this->GetArrayElem($jdata, $keywords['work_mode'], '', $fnd);
             if ($fnd) {
                 $w = $this->DecodeWorkMode($workMode);
-                $this->SendDebug(__FUNCTION__, '... WorkMode (workMode)=' . $workMode . ' => ' . $w, 0);
+                $this->SendDebug(__FUNCTION__, '... WorkMode (' . $keywords['work_mode'] . ')=' . $workMode . ' => ' . $w, 0);
                 $this->SaveValue('WorkMode', $w, $is_changed);
             }
         }
 
         if ($options['speed_level']) {
-            $speedLevel = $this->GetArrayElem($jdata, 'manualSpeedLevel', '', $fnd);
+            $speedLevel = $this->GetArrayElem($jdata, $keywords['speed_level'], '', $fnd);
             if ($fnd) {
-                $this->SendDebug(__FUNCTION__, '... SpeedLevel (manualSpeedLevel)=' . $speedLevel, 0);
+                $this->SendDebug(__FUNCTION__, '... SpeedLevel (' . $keywords['speed_level'] . ')=' . $speedLevel, 0);
                 $this->SaveValue('SpeedLevel', $speedLevel, $is_changed);
             }
         }
 
         if ($options['display_mode']) {
-            $screenSwitch = $this->GetArrayElem($jdata, 'screenSwitch', '', $fnd);
+            $screenSwitch = $this->GetArrayElem($jdata, $keywords['display_mode'], '', $fnd);
             if ($fnd) {
-                $this->SendDebug(__FUNCTION__, '... DisplayMode (screenSwitch)=' . $screenSwitch, 0);
+                $this->SendDebug(__FUNCTION__, '... DisplayMode (' . $keywords['display_mode'] . ')=' . $screenSwitch, 0);
                 $this->SaveValue('DisplayMode', $screenSwitch, $is_changed);
             }
         }
 
         if ($options['light_detection']) {
-            $lightDetectionSwitch = $this->GetArrayElem($jdata, 'lightDetectionSwitch', '', $fnd);
+            $lightDetectionSwitch = $this->GetArrayElem($jdata, $keywords['light_detection'], '', $fnd);
             if ($fnd) {
-                $this->SendDebug(__FUNCTION__, '... SpeedLevel (lightDetectionSwitch)=' . $speedLevel, 0);
+                $this->SendDebug(__FUNCTION__, '... SpeedLevel (' . $keywords['light_detection'] . ')=' . $lightDetectionSwitch, 0);
                 $this->SaveValue('LightDetection', $lightDetectionSwitch, $is_changed);
             }
         }
 
         if ($options['filter_lifetime']) {
-            $filterLifePercent = (int) $this->GetArrayElem($jdata, 'filterLifePercent', 0, $fnd);
+            $filterLifePercent = (int) $this->GetArrayElem($jdata, $keywords['filter_lifetime'], 0, $fnd);
             if ($fnd) {
-                $this->SendDebug(__FUNCTION__, '... FilterLifetime (filterLifePercent)=' . $filterLifePercent, 0);
+                $this->SendDebug(__FUNCTION__, '... FilterLifetime (' . $keywords['filter_lifetime'] . ')=' . $filterLifePercent, 0);
                 $this->SaveValue('FilterLifetime', $filterLifePercent, $is_changed);
             }
         }
 
         if ($options['air_quality']) {
-            $AQLevel = (int) $this->GetArrayElem($jdata, 'AQLevel', 0, $fnd);
+            $AQLevel = (int) $this->GetArrayElem($jdata, $keywords['air_quality'], 0, $fnd);
             if ($fnd) {
-                $this->SendDebug(__FUNCTION__, '... AirQuality (AQLevel)=' . $AQLevel, 0);
+                $this->SendDebug(__FUNCTION__, '... AirQuality (' . $keywords['air_quality'] . ')=' . $AQLevel, 0);
                 $this->SaveValue('AirQuality', $AQLevel, $is_changed);
             }
         }
 
         if ($options['pm25']) {
-            $PM25 = (int) $this->GetArrayElem($jdata, 'PM25', 0, $fnd);
+            $PM25 = (int) $this->GetArrayElem($jdata, $keywords['pm25'], 0, $fnd);
             if ($fnd) {
-                $this->SendDebug(__FUNCTION__, '... PM25 (PM25)=' . $PM25, 0);
+                $this->SendDebug(__FUNCTION__, '... PM25 (' . $keywords['pm25'] . ')=' . $PM25, 0);
                 $this->SaveValue('PM25', $PM25, $is_changed);
             }
         }
@@ -619,25 +649,41 @@ class VeSyncDevice extends IPSModule
             return false;
         }
 
+        $method = '';
+        $opts = [];
+        $r = false;
+
         $model = $this->ReadPropertyString('model');
         switch ($model) {
             case 'Vital100S':
-            case 'Core300S':
+                $method = 'setSwitch';
                 $opts = [
                     'data' => [
                         'powerSwitch' => (int) $mode,
                         'switchIdx'   => 0,
                     ],
                 ];
-                $jdata = $this->CallBypassV2('setSwitch', $opts);
-                $r = $jdata != json_encode([]);
-                $this->SendDebug(__FUNCTION__, 'jdata=' . print_r($jdata, true) . ', r=' . $this->bool2str($r), 0);
+                break;
+            case 'Core300S':
+                $method = 'setSwitch';
+                $opts = [
+                    'data' => [
+                        'enabled' => (int) $mode,
+                        'id'      => 0,
+                    ],
+                ];
                 break;
             default:
-                $r = false;
                 $this->SendDebug(__FUNCTION__, 'unsupported model ' . $model, 0);
                 break;
         }
+
+        if ($method != '') {
+            $jdata = $this->CallBypassV2($method, $opts);
+            $r = $jdata != json_encode([]);
+            $this->SendDebug(__FUNCTION__, 'jdata=' . print_r($jdata, true) . ', r=' . $this->bool2str($r), 0);
+        }
+
         return $r;
     }
 
@@ -647,24 +693,50 @@ class VeSyncDevice extends IPSModule
             return false;
         }
 
+        $method = '';
+        $opts = [];
+        $r = false;
+
         $model = $this->ReadPropertyString('model');
         switch ($model) {
             case 'Vital100S':
-            case 'Core300S':
+                $method = 'setPurifierMode';
                 $opts = [
                     'data' => [
                         'workMode' => $this->EncodeWorkMode($mode),
                     ],
                 ];
-                $jdata = $this->CallBypassV2('setPurifierMode', $opts);
-                $r = $jdata != json_encode([]);
-                $this->SendDebug(__FUNCTION__, 'jdata=' . print_r($jdata, true) . ', r=' . $this->bool2str($r), 0);
+                break;
+            case 'Core300S':
+                if ($mode == self::$MODE_FAN_MANUAL) {
+                    $method = 'setLevel';
+                    $opts = [
+                        'data' => [
+                            'id'    => 0,
+                            'level' => 1,
+                            'type'  => 'wind',
+                        ],
+                    ];
+                } else {
+                    $method = 'setPurifierMode';
+                    $opts = [
+                        'data' => [
+                            'mode' => $this->EncodeWorkMode($mode),
+                        ],
+                    ];
+                }
                 break;
             default:
-                $r = false;
                 $this->SendDebug(__FUNCTION__, 'unsupported model ' . $model, 0);
                 break;
         }
+
+        if ($method != '') {
+            $jdata = $this->CallBypassV2($method, $opts);
+            $r = $jdata != json_encode([]);
+            $this->SendDebug(__FUNCTION__, 'jdata=' . print_r($jdata, true) . ', r=' . $this->bool2str($r), 0);
+        }
+
         return $r;
     }
 
@@ -674,10 +746,14 @@ class VeSyncDevice extends IPSModule
             return false;
         }
 
+        $method = '';
+        $opts = [];
+        $r = false;
+
         $model = $this->ReadPropertyString('model');
         switch ($model) {
             case 'Vital100S':
-            case 'Core300S':
+                $method = 'setLevel';
                 $opts = [
                     'data' => [
                         'levelIdx'         => 0,
@@ -685,18 +761,31 @@ class VeSyncDevice extends IPSModule
                         'levelType'        => 'wind',
                     ],
                 ];
-                $jdata = $this->CallBypassV2('setLevel', $opts);
-                $r = $jdata != json_encode([]);
-                if ($r) {
-                    $this->SetValue('WorkMode', self::$MODE_FAN_MANUAL);
-                }
-                $this->SendDebug(__FUNCTION__, 'jdata=' . print_r($jdata, true) . ', r=' . $this->bool2str($r), 0);
+                break;
+            case 'Core300S':
+                $method = 'setLevel';
+                $opts = [
+                    'data' => [
+                        'id'    => 0,
+                        'level' => $level,
+                        'type'  => 'wind',
+                    ],
+                ];
                 break;
             default:
-                $r = false;
                 $this->SendDebug(__FUNCTION__, 'unsupported model ' . $model, 0);
                 break;
         }
+
+        if ($method != '') {
+            $jdata = $this->CallBypassV2('setLevel', $opts);
+            $r = $jdata != json_encode([]);
+            if ($r) {
+                $this->SetValue('WorkMode', self::$MODE_FAN_MANUAL);
+            }
+            $this->SendDebug(__FUNCTION__, 'jdata=' . print_r($jdata, true) . ', r=' . $this->bool2str($r), 0);
+        }
+
         return $r;
     }
 
@@ -706,24 +795,39 @@ class VeSyncDevice extends IPSModule
             return false;
         }
 
+        $method = '';
+        $opts = [];
+        $r = false;
+
         $model = $this->ReadPropertyString('model');
         switch ($model) {
             case 'Vital100S':
-            case 'Core300S':
+                $method = 'setDisplay';
                 $opts = [
                     'data' => [
                         'screenSwitch' => (int) $mode,
                     ],
                 ];
-                $jdata = $this->CallBypassV2('setDisplay', $opts);
-                $r = $jdata != json_encode([]);
-                $this->SendDebug(__FUNCTION__, 'jdata=' . print_r($jdata, true) . ', r=' . $this->bool2str($r), 0);
+                break;
+            case 'Core300S':
+                $method = 'setDisplay';
+                $opts = [
+                    'data' => [
+                        'state' => (int) $mode,
+                    ],
+                ];
                 break;
             default:
-                $r = false;
                 $this->SendDebug(__FUNCTION__, 'unsupported model ' . $model, 0);
                 break;
         }
+
+        if ($method != '') {
+            $jdata = $this->CallBypassV2($method, $opts);
+            $r = $jdata != json_encode([]);
+            $this->SendDebug(__FUNCTION__, 'jdata=' . print_r($jdata, true) . ', r=' . $this->bool2str($r), 0);
+        }
+
         return $r;
     }
 
@@ -733,24 +837,31 @@ class VeSyncDevice extends IPSModule
             return false;
         }
 
+        $method = '';
+        $opts = [];
+        $r = false;
+
         $model = $this->ReadPropertyString('model');
         switch ($model) {
             case 'Vital100S':
-            case 'Core300S':
+                $method = 'setLightDetection';
                 $opts = [
                     'data' => [
                         'lightDetectionSwitch' => (int) $mode,
                     ],
                 ];
-                $jdata = $this->CallBypassV2('setLightDetection', $opts);
-                $r = $jdata != json_encode([]);
-                $this->SendDebug(__FUNCTION__, 'jdata=' . print_r($jdata, true) . ', r=' . $this->bool2str($r), 0);
                 break;
             default:
-                $r = false;
                 $this->SendDebug(__FUNCTION__, 'unsupported model ' . $model, 0);
                 break;
         }
+
+        if ($method != '') {
+            $jdata = $this->CallBypassV2($method, $opts);
+            $r = $jdata != json_encode([]);
+            $this->SendDebug(__FUNCTION__, 'jdata=' . print_r($jdata, true) . ', r=' . $this->bool2str($r), 0);
+        }
+
         return $r;
     }
 }

@@ -98,6 +98,7 @@ VeSync.OnOff
 
 * Integer<br>
 VeSync.AQLevel,
+VeSync.AQValue,
 VeSync.Percent,
 VeSync.PM25,
 VeSync.SpeedLevel1234,
@@ -126,7 +127,7 @@ https://github.com/webdjoe/pyvesync.git
 
 ## 7. Versions-Historie
 
-- 1.2 @ 21.12.2023 12:57
+- 1.2 @ 21.12.2023 15:41
   - Neu: Core300S hinzugefügt
 
 - 1.1 @ 09.12.2023 16:40
