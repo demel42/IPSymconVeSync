@@ -127,7 +127,7 @@ https://github.com/webdjoe/pyvesync.git
 
 ## 7. Versions-Historie
 
-- 1.2 @ 21.12.2023 15:41
+- 1.2 @ 22.12.2023 08:32
   - Neu: Core300S hinzugefügt
 
 - 1.1 @ 09.12.2023 16:40

@@ -543,6 +543,14 @@ class VeSyncDevice extends IPSModule
             }
         }
 
+        if ($options['air_quality_value']) {
+            $AQValue = (int) $this->GetArrayElem($jdata, $keywords['air_quality_value'], 0, $fnd);
+            if ($fnd) {
+                $this->SendDebug(__FUNCTION__, '... AirQualityValue (' . $keywords['air_quality_value'] . ')=' . $AQValue, 0);
+                $this->SaveValue('AirQualityValue', $AQValue, $is_changed);
+            }
+        }
+
         if ($options['pm25']) {
             $PM25 = (int) $this->GetArrayElem($jdata, $keywords['pm25'], 0, $fnd);
             if ($fnd) {
@@ -668,7 +676,7 @@ class VeSyncDevice extends IPSModule
                 $method = 'setSwitch';
                 $opts = [
                     'data' => [
-                        'enabled' => (int) $mode,
+                        'enabled' => $mode,
                         'id'      => 0,
                     ],
                 ];
@@ -813,7 +821,7 @@ class VeSyncDevice extends IPSModule
                 $method = 'setDisplay';
                 $opts = [
                     'data' => [
-                        'state' => (int) $mode,
+                        'state' => $mode,
                     ],
                 ];
                 break;
