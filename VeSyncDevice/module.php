@@ -47,7 +47,6 @@ class VeSyncDevice extends IPSModule
                 $options['filter_lifetime'] = true;
                 $options['air_quality'] = true;
                 $options['air_quality_value'] = true;
-                $options['rssi'] = true;
                 break;
             default:
                 $this->SendDebug(__FUNCTION__, 'unsupported model ' . $model, 0);
