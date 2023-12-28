@@ -127,9 +127,11 @@ https://github.com/webdjoe/pyvesync.git
 
 ## 7. Versions-Historie
 
-- 1.2 @ 28.12.2023 10:11
-  - Neu: Core 300S hinzugefügt
+- 1.3 @ 28.12.2023 10:11
   - Verbesserung: Umsetzung der numerischen Stufen von "AQLevel" in entsprechenden Text
+
+- 1.2 @ 22.12.2023 10:43
+  - Neu: Core 300S hinzugefügt
 
 - 1.1 @ 09.12.2023 16:40
   - Fix: ein Gerät, das nicht erreichbar ist (z.B. stromlos), wurde als HTTP-Fehler gewertet
