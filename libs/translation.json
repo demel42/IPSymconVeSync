@@ -19,6 +19,13 @@
 			"Sleep": "Schlaf",
 			"Pet": "Haustier",
 
+			"__variableprofile__": "VeSync.AQLevel",
+			"Very good": "Sehr gut",
+			"Good": "Gut",
+			"Moderate": "Moderat",
+			"Poor": "Schlecht",
+			"Very poor": "Sehr schlecht",
+
 			"__end__": ""
 		}
 	}

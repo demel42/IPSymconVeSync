@@ -91,7 +91,16 @@ trait VeSyncLocalLib
         $this->CreateVarProfile('VeSync.SpeedLevel1234', VARIABLETYPE_INTEGER, '', 1, 4, 0, 0, '', '', $reInstall);
 
         $this->CreateVarProfile('VeSync.PM25', VARIABLETYPE_INTEGER, ' µg/m³', 0, 0, 0, 0, 'Snow', '', $reInstall);
-        $this->CreateVarProfile('VeSync.AQLevel', VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, 'Gauge', '', $reInstall);
+
+        $associations = [
+            ['Wert' => 1, 'Name' => $this->Translate('Very good'), 'Farbe' => 0x228B22],	// PM < 15
+            ['Wert' => 2, 'Name' => $this->Translate('Good'), 'Farbe' => 0x32CD32],			// PM 16..30
+            ['Wert' => 3, 'Name' => $this->Translate('Moderate'), 'Farbe' => 0xFFFF00],		// PM 31..50
+            ['Wert' => 4, 'Name' => $this->Translate('Poor'), 'Farbe' => 0xFFA500],			// PM 51..100
+            ['Wert' => 5, 'Name' => $this->Translate('Very poor'), 'Farbe' => 0xEE0000],	// PM > 100
+        ];
+        $this->CreateVarProfile('VeSync.AQLevel', VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, 'Gauge', $associations, $reInstall);
+
         $this->CreateVarProfile('VeSync.AQValue', VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, 'Gauge', '', $reInstall);
     }
 
