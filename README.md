@@ -127,7 +127,7 @@ https://github.com/webdjoe/pyvesync.git
 
 ## 7. Versions-Historie
 
-- 1.3 @ 28.12.2023 10:11
+- 1.3 @ 02.01.2024 11:56
   - Verbesserung: Umsetzung der numerischen Stufen von "AQLevel" in entsprechenden Text
 
 - 1.2 @ 22.12.2023 10:43
