@@ -59,8 +59,9 @@ class VeSyncIO extends IPSModule
         $this->RegisterPropertyString('username', '');
         $this->RegisterPropertyString('password', '');
 
+        $this->RegisterPropertyBoolean('collectApiCallStats', true);
+
         $this->RegisterAttributeString('UpdateInfo', json_encode([]));
-        $this->RegisterAttributeString('ApiCallStats', json_encode([]));
         $this->RegisterAttributeString('ModuleStats', json_encode([]));
 
         $this->RegisterAttributeString('AccessData', '');
@@ -173,6 +174,12 @@ class VeSyncIO extends IPSModule
             ],
         ];
 
+        $formElements[] = [
+            'type'    => 'CheckBox',
+            'name'    => 'collectApiCallStats',
+            'caption' => 'Collect data of API calls'
+        ];
+
         return $formElements;
     }
 
@@ -195,30 +202,24 @@ class VeSyncIO extends IPSModule
             'onClick' => 'IPS_RequestAction(' . $this->InstanceID . ', "TestAccount", "");',
         ];
 
+        $items = [
+            $this->GetInstallVarProfilesFormItem(),
+            [
+                'type'    => 'Button',
+                'caption' => 'Clear token',
+                'onClick' => 'IPS_RequestAction(' . $this->InstanceID . ', "ClearToken", "");',
+            ],
+        ];
+        $collectApiCallStats = $this->ReadPropertyBoolean('collectApiCallStats');
+        if ($collectApiCallStats) {
+            $items[] = $this->GetApiCallStatsFormItem();
+        }
+
         $formActions[] = [
             'type'      => 'ExpansionPanel',
             'caption'   => 'Expert area',
             'expanded'  => false,
-            'items'     => [
-                $this->GetInstallVarProfilesFormItem(),
-                [
-                    'type'    => 'Button',
-                    'caption' => 'Clear token',
-                    'onClick' => 'IPS_RequestAction(' . $this->InstanceID . ', "ClearToken", "");',
-                ],
-                $this->GetApiCallStatsFormItem(),
-            ],
-        ];
-
-        $formActions[] = [
-            'type'      => 'ExpansionPanel',
-            'caption'   => 'Test area',
-            'expanded'  => false,
-            'items'     => [
-                [
-                    $this->GetApiCallStatsFormItem(),
-                ],
-            ]
+            'items'     => $items,
         ];
 
         $formActions[] = $this->GetInformationFormAction();
@@ -439,7 +440,10 @@ class VeSyncIO extends IPSModule
             }
         }
 
-        $this->ApiCallsCollect($url, $err, $statuscode);
+        $collectApiCallStats = $this->ReadPropertyBoolean('collectApiCallStats');
+        if ($collectApiCallStats) {
+            $this->ApiCallCollect($url, $err, $statuscode);
+        }
 
         if ($statuscode) {
             $this->SendDebug(__FUNCTION__, '    statuscode=' . $statuscode . ', err=' . $err, 0);

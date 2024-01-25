@@ -127,6 +127,11 @@ https://github.com/webdjoe/pyvesync.git
 
 ## 7. Versions-Historie
 
+- 1.4 @ 25.01.2024 14:57
+  - Neu: Schalter, um Daten zu API-Aufrufen zu sammeln
+    Die API-Aufruf-Daten stehen nun in einem Medienobjekt zur Verfügung
+  - update submodule CommonStubs
+
 - 1.3 @ 02.01.2024 11:56
   - Verbesserung: Umsetzung der numerischen Stufen von "AQLevel" in entsprechenden Text
 
