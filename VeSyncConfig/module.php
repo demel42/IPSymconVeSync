@@ -122,7 +122,7 @@ class VeSyncConfig extends IPSModule
 
                 $instanceID = 0;
                 foreach ($instIDs as $instID) {
-                    if (IPS_GetProperty($instID, 'cid') == $cid) {
+                    if (@IPS_GetProperty($instID, 'cid') == $cid) {
                         $this->SendDebug(__FUNCTION__, 'instance found: ' . IPS_GetName($instID) . ' (' . $instID . ')', 0);
                         $instanceID = $instID;
                         break;
@@ -153,9 +153,8 @@ class VeSyncConfig extends IPSModule
                         ],
                     ],
                 ];
-
                 $entries[] = $entry;
-                $this->SendDebug(__FUNCTION__, 'entry=' . print_r($entry, true), 0);
+                $this->SendDebug(__FUNCTION__, 'instanceID=' . $instanceID . ', entry=' . print_r($entry, true), 0);
             }
         }
         foreach ($instIDs as $instID) {
@@ -175,10 +174,10 @@ class VeSyncConfig extends IPSModule
             }
 
             $name = IPS_GetName($instID);
-            $cid = IPS_GetProperty($instID, 'cid');
-            $configModule = IPS_GetProperty($instID, 'configModule');
-            $deviceType = IPS_GetProperty($instID, 'deviceType');
-            $model = IPS_GetProperty($instID, 'model');
+            @$cid = IPS_GetProperty($instID, 'cid');
+            @$configModule = IPS_GetProperty($instID, 'configModule');
+            @$deviceType = IPS_GetProperty($instID, 'deviceType');
+            @$model = IPS_GetProperty($instID, 'model');
 
             $entry = [
                 'instanceID'  => $instID,
@@ -187,9 +186,8 @@ class VeSyncConfig extends IPSModule
                 'type'        => $deviceType,
                 'model'       => $model,
             ];
-
             $entries[] = $entry;
-            $this->SendDebug(__FUNCTION__, 'missing entry=' . print_r($entry, true), 0);
+            $this->SendDebug(__FUNCTION__, 'lost: instanceID=' . $instID . ', entry=' . print_r($entry, true), 0);
         }
 
         return $entries;
