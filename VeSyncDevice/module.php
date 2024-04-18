@@ -40,6 +40,7 @@ class VeSyncDevice extends IPSModule
                 $options['rssi'] = true;
                 break;
             case 'Core300S':
+            case 'Core400S':
                 $options['power'] = true;
                 $options['work_mode0123'] = true;
                 $options['speed_level1234'] = true;
@@ -258,8 +259,8 @@ class VeSyncDevice extends IPSModule
                     'enabled' => false
                 ],
                 [
-                    'type'    => 'RowLayout',
-                    'items'   => [
+                    'type'  => 'RowLayout',
+                    'items' => [
                         [
                             'type'    => 'ValidationTextBox',
                             'name'    => 'model',
@@ -323,21 +324,21 @@ class VeSyncDevice extends IPSModule
         ];
 
         $formActions[] = [
-            'type'      => 'ExpansionPanel',
-            'caption'   => 'Expert area',
-            'expanded'  => false,
-            'items'     => [
+            'type'     => 'ExpansionPanel',
+            'caption'  => 'Expert area',
+            'expanded' => false,
+            'items'    => [
                 $this->GetInstallVarProfilesFormItem(),
             ],
         ];
 
         $formActions[] = [
-            'type'      => 'ExpansionPanel',
-            'caption'   => 'Test area',
-            'expanded'  => false,
-            'items'     => [
+            'type'     => 'ExpansionPanel',
+            'caption'  => 'Test area',
+            'expanded' => false,
+            'items'    => [
                 [
-                    'type'    => 'TestCenter',
+                    'type' => 'TestCenter',
                 ],
             ]
         ];
@@ -382,12 +383,12 @@ class VeSyncDevice extends IPSModule
         $configModule = $this->ReadPropertyString('configModule');
 
         $sdata = [
-            'DataID'           => '{DEC26699-97AD-BBF3-1764-2E443EC8E1C4}',
-            'CallerID'         => $this->InstanceID,
-            'Function'         => 'CallBypassV2',
-            'cid'              => $cid,
-            'configModule'     => $configModule,
-            'payload'          => json_encode($payload),
+            'DataID'       => '{DEC26699-97AD-BBF3-1764-2E443EC8E1C4}',
+            'CallerID'     => $this->InstanceID,
+            'Function'     => 'CallBypassV2',
+            'cid'          => $cid,
+            'configModule' => $configModule,
+            'payload'      => json_encode($payload),
         ];
         $this->SendDebug(__FUNCTION__, 'SendDataToParent(' . print_r($sdata, true) . ')', 0);
         $data = $this->SendDataToParent(json_encode($sdata));
@@ -403,6 +404,7 @@ class VeSyncDevice extends IPSModule
         switch ($model) {
             case 'Vital100S':
             case 'Core300S':
+            case 'Core400S':
                 $jdata = $this->CallBypassV2('getPurifierStatus', ['data' => []]);
                 break;
             default:
@@ -421,11 +423,12 @@ class VeSyncDevice extends IPSModule
         switch ($model) {
             case 'Vital100S':
             case 'Core300S':
+            case 'Core400S':
                 $sdata = [
-                    'DataID'           => '{DEC26699-97AD-BBF3-1764-2E443EC8E1C4}',
-                    'CallerID'         => $this->InstanceID,
-                    'Function'         => 'GetDeviceDetails',
-                    'cid'              => $cid,
+                    'DataID'   => '{DEC26699-97AD-BBF3-1764-2E443EC8E1C4}',
+                    'CallerID' => $this->InstanceID,
+                    'Function' => 'GetDeviceDetails',
+                    'cid'      => $cid,
                 ];
                 $this->SendDebug(__FUNCTION__, 'SendDataToParent(' . print_r($sdata, true) . ')', 0);
                 $data = $this->SendDataToParent(json_encode($sdata));
@@ -481,6 +484,7 @@ class VeSyncDevice extends IPSModule
                 ];
                 break;
             case 'Core300S':
+            case 'Core400S':
                 $keywords = [
                     'power'             => 'enabled',
                     'work_mode'         => 'mode',
@@ -683,6 +687,7 @@ class VeSyncDevice extends IPSModule
                 ];
                 break;
             case 'Core300S':
+            case 'Core400S':
                 $method = 'setSwitch';
                 $opts = [
                     'data' => [
@@ -726,6 +731,7 @@ class VeSyncDevice extends IPSModule
                 ];
                 break;
             case 'Core300S':
+            case 'Core400S':
                 if ($mode == self::$MODE_FAN_MANUAL) {
                     $method = 'setLevel';
                     $opts = [
@@ -781,6 +787,7 @@ class VeSyncDevice extends IPSModule
                 ];
                 break;
             case 'Core300S':
+            case 'Core400S':
                 $method = 'setLevel';
                 $opts = [
                     'data' => [
@@ -828,6 +835,7 @@ class VeSyncDevice extends IPSModule
                 ];
                 break;
             case 'Core300S':
+            case 'Core400S':
                 $method = 'setDisplay';
                 $opts = [
                     'data' => [

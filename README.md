@@ -127,6 +127,10 @@ https://github.com/webdjoe/pyvesync.git
 
 ## 7. Versions-Historie
 
+- 1.5 @ 18.04.2024 07:29
+  - Neu: Core 400S hinzugefügt
+  - update submodule CommonStubs
+
 - 1.4 @ 07.02.2024 17:46
   - Fix: Absicherung von Zugriffen auf andere Instanzen in Konfiguratoren
   - Änderung: Medien-Objekte haben zur eindeutigen Identifizierung jetzt ebenfalls ein Ident
