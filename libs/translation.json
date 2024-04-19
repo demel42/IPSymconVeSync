@@ -19,6 +19,13 @@
 			"Sleep": "Schlaf",
 			"Pet": "Haustier",
 
+			"__variableprofile__": "VeSync.SpeedLevel123",
+			"__variableprofile__": "VeSync.SpeedLevel1234",
+			"Level 1": "Stufe 1",
+			"Level 2": "Stufe 2",
+			"Level 3": "Stufe 3",
+			"Level 4": "Stufe 4",
+
 			"__variableprofile__": "VeSync.AQLevel",
 			"Very good": "Sehr gut",
 			"Good": "Gut",

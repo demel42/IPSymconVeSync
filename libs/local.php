@@ -87,8 +87,20 @@ trait VeSyncLocalLib
         ];
         $this->CreateVarProfile('VeSync.WorkMode0123', VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, '', $associations, $reInstall);
 
-        $this->CreateVarProfile('VeSync.SpeedLevel123', VARIABLETYPE_INTEGER, '', 1, 3, 0, 0, '', '', $reInstall);
-        $this->CreateVarProfile('VeSync.SpeedLevel1234', VARIABLETYPE_INTEGER, '', 1, 4, 0, 0, '', '', $reInstall);
+        $associations = [
+            ['Wert' => 1, 'Name' => $this->Translate('Level 1'), 'Farbe' => -1],
+            ['Wert' => 2, 'Name' => $this->Translate('Level 2'), 'Farbe' => -1],
+            ['Wert' => 3, 'Name' => $this->Translate('Level 3'), 'Farbe' => -1],
+        ];
+        $this->CreateVarProfile('VeSync.SpeedLevel123', VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, '', $associations, $reInstall);
+
+        $associations = [
+            ['Wert' => 1, 'Name' => $this->Translate('Level 1'), 'Farbe' => -1],
+            ['Wert' => 2, 'Name' => $this->Translate('Level 2'), 'Farbe' => -1],
+            ['Wert' => 3, 'Name' => $this->Translate('Level 3'), 'Farbe' => -1],
+            ['Wert' => 4, 'Name' => $this->Translate('Level 4'), 'Farbe' => -1],
+        ];
+        $this->CreateVarProfile('VeSync.SpeedLevel1234', VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, '', $associations, $reInstall);
 
         $this->CreateVarProfile('VeSync.PM25', VARIABLETYPE_INTEGER, ' µg/m³', 0, 0, 0, 0, 'Snow', '', $reInstall);
 

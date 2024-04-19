@@ -119,6 +119,10 @@ class VeSyncDevice extends IPSModule
             $r[] = $this->Translate('Adjusting variableprofile \'VeSync.AQLevel\'');
         }
 
+        if ($this->version2num($oldInfo) < $this->version2num('1.6')) {
+            $r[] = $this->Translate('Adjusting variableprofiles \'VeSync.SpeedLevel123\', \'VeSync.SpeedLevel1234\'');
+        }
+
         return $r;
     }
 
@@ -127,6 +131,16 @@ class VeSyncDevice extends IPSModule
         if ($this->version2num($oldInfo) < $this->version2num('1.3')) {
             if (IPS_VariableProfileExists('VeSync.AQLevel')) {
                 IPS_DeleteVariableProfile('VeSync.AQLevel');
+            }
+            $this->InstallVarProfiles(false);
+        }
+
+        if ($this->version2num($oldInfo) < $this->version2num('1.6')) {
+            if (IPS_VariableProfileExists('VeSync.SpeedLevel123')) {
+                IPS_DeleteVariableProfile('VeSync.SpeedLevel123');
+            }
+            if (IPS_VariableProfileExists('VeSync.SpeedLevel1234')) {
+                IPS_DeleteVariableProfile('VeSync.SpeedLevel1234');
             }
             $this->InstallVarProfiles(false);
         }

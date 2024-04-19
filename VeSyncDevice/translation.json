@@ -5,6 +5,7 @@
 
 			"__function__": "CheckUpdate",
 			"Adjusting variableprofile 'VeSync.AQLevel'": "Anpassen des Variablenprofils 'VeSync.AQLevel'",
+			"Adjusting variableprofiles 'VeSync.SpeedLevel123', 'VeSync.SpeedLevel1234'": "Anpassen der Variablenprofile 'VeSync.SpeedLevel123', 'VeSync.SpeedLevel1234'",
 
 			"__elements__": "",
 			"Disable instance": "Instanz deaktivieren",

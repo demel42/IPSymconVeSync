@@ -101,11 +101,11 @@ VeSync.AQLevel,
 VeSync.AQValue,
 VeSync.Percent,
 VeSync.PM25,
-VeSync.SpeedLevel1234,
 VeSync.SpeedLevel123,
+VeSync.SpeedLevel1234,
 VeSync.Wifi,
-VeSync.WorkMode01234,
 VeSync.WorkMode0123,
+VeSync.WorkMode01234
 
 ## 6. Anhang
 
@@ -126,6 +126,9 @@ https://github.com/webdjoe/pyvesync.git
 ### Quellen
 
 ## 7. Versions-Historie
+
+- 1.6 @ 19.04.2024 10:05
+  - Fix: Korrektur der Variablenprofile 'VeSync.SpeedLevel123', 'VeSync.SpeedLevel1234'
 
 - 1.5 @ 18.04.2024 07:29
   - Neu: Core 400S hinzugefügt
