@@ -16,6 +16,7 @@ class VeSyncDevice extends IPSModule
         $options['work_mode'] = false;
         $options['work_mode01234'] = false;
         $options['work_mode0123'] = false;
+        $options['work_mode013'] = false;
         $options['speed_level'] = false;
         $options['speed_level123'] = false;
         $options['speed_level1234'] = false;
@@ -39,7 +40,24 @@ class VeSyncDevice extends IPSModule
                 $options['pm25'] = true;
                 $options['rssi'] = true;
                 break;
+            case 'Core200S':
+                $options['power'] = true;
+                $options['work_mode013'] = true;
+                $options['speed_level123'] = true;
+                $options['display_mode'] = true;
+                $options['filter_lifetime'] = true;
+                $options['air_quality'] = true;
+                $options['air_quality_value'] = true;
+                break;
             case 'Core300S':
+                $options['power'] = true;
+                $options['work_mode0123'] = true;
+                $options['speed_level123'] = true;
+                $options['display_mode'] = true;
+                $options['filter_lifetime'] = true;
+                $options['air_quality'] = true;
+                $options['air_quality_value'] = true;
+                break;
             case 'Core400S':
                 $options['power'] = true;
                 $options['work_mode0123'] = true;
@@ -53,7 +71,7 @@ class VeSyncDevice extends IPSModule
                 $this->SendDebug(__FUNCTION__, 'unsupported model ' . $model, 0);
                 break;
         }
-        if ($options['work_mode01234'] || $options['work_mode0123']) {
+        if ($options['work_mode01234'] || $options['work_mode0123'] || $options['work_mode013']) {
             $options['work_mode'] = true;
         }
         if ($options['speed_level1234'] || $options['speed_level123']) {
@@ -188,6 +206,8 @@ class VeSyncDevice extends IPSModule
             $varprof = 'VeSync.WorkMode01234';
         } elseif ($options['work_mode0123']) {
             $varprof = 'VeSync.WorkMode0123';
+        } elseif ($options['work_mode013']) {
+            $varprof = 'VeSync.WorkMode013';
         } else {
             $varprof = '';
         }
@@ -417,6 +437,7 @@ class VeSyncDevice extends IPSModule
         $model = $this->ReadPropertyString('model');
         switch ($model) {
             case 'Vital100S':
+            case 'Core200S':
             case 'Core300S':
             case 'Core400S':
                 $jdata = $this->CallBypassV2('getPurifierStatus', ['data' => []]);
@@ -436,6 +457,7 @@ class VeSyncDevice extends IPSModule
         $model = $this->ReadPropertyString('model');
         switch ($model) {
             case 'Vital100S':
+            case 'Core200S':
             case 'Core300S':
             case 'Core400S':
                 $sdata = [
@@ -497,6 +519,7 @@ class VeSyncDevice extends IPSModule
                     'pm25'            => 'PM25',
                 ];
                 break;
+            case 'Core200S':
             case 'Core300S':
             case 'Core400S':
                 $keywords = [
@@ -700,6 +723,7 @@ class VeSyncDevice extends IPSModule
                     ],
                 ];
                 break;
+            case 'Core200S':
             case 'Core300S':
             case 'Core400S':
                 $method = 'setSwitch';
@@ -744,6 +768,7 @@ class VeSyncDevice extends IPSModule
                     ],
                 ];
                 break;
+            case 'Core200S':
             case 'Core300S':
             case 'Core400S':
                 if ($mode == self::$MODE_FAN_MANUAL) {
@@ -800,6 +825,7 @@ class VeSyncDevice extends IPSModule
                     ],
                 ];
                 break;
+            case 'Core200S':
             case 'Core300S':
             case 'Core400S':
                 $method = 'setLevel';
@@ -848,6 +874,7 @@ class VeSyncDevice extends IPSModule
                     ],
                 ];
                 break;
+            case 'Core200S':
             case 'Core300S':
             case 'Core400S':
                 $method = 'setDisplay';

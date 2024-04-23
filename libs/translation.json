@@ -12,7 +12,9 @@
 			"On": "Ein",
 			"Off": "Aus",
 
-			"__variableprofile__": "VeSync.WorkMode",
+			"__variableprofile__": "VeSync.WorkMode01234",
+			"__variableprofile__": "VeSync.WorkMode0123",
+			"__variableprofile__": "VeSync.WorkMode013",
 			"Off": "Aus",
 			"Manual": "manuell",
 			"Auto": "automatisch",

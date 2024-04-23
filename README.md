@@ -106,6 +106,7 @@ VeSync.SpeedLevel1234,
 VeSync.Wifi,
 VeSync.WorkMode0123,
 VeSync.WorkMode01234
+VeSync.WorkMode013,
 
 ## 6. Anhang
 
@@ -126,6 +127,10 @@ https://github.com/webdjoe/pyvesync.git
 ### Quellen
 
 ## 7. Versions-Historie
+
+- 1.7 @ 23.04.2024 08:06
+  - Neu: Core 200S hinzugefügt
+  - Fix: Lüfterstufen des Core300S angepasst
 
 - 1.6 @ 19.04.2024 10:05
   - Fix: Korrektur der Variablenprofile 'VeSync.SpeedLevel123', 'VeSync.SpeedLevel1234'

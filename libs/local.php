@@ -88,6 +88,13 @@ trait VeSyncLocalLib
         $this->CreateVarProfile('VeSync.WorkMode0123', VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, '', $associations, $reInstall);
 
         $associations = [
+            ['Wert' => self::$MODE_FAN_OFF, 'Name' => $this->Translate('Off'), 'Farbe' => -1],
+            ['Wert' => self::$MODE_FAN_MANUAL, 'Name' => $this->Translate('Manual'), 'Farbe' => -1],
+            ['Wert' => self::$MODE_FAN_SLEEP, 'Name' => $this->Translate('Sleep'), 'Farbe' => -1],
+        ];
+        $this->CreateVarProfile('VeSync.WorkMode013', VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, '', $associations, $reInstall);
+
+        $associations = [
             ['Wert' => 1, 'Name' => $this->Translate('Level 1'), 'Farbe' => -1],
             ['Wert' => 2, 'Name' => $this->Translate('Level 2'), 'Farbe' => -1],
             ['Wert' => 3, 'Name' => $this->Translate('Level 3'), 'Farbe' => -1],
