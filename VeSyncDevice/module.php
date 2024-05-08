@@ -525,7 +525,7 @@ class VeSyncDevice extends IPSModule
                 $keywords = [
                     'power'             => 'enabled',
                     'work_mode'         => 'mode',
-                    'speed_level'       => 'level',
+                    'speed_level'       => 'fanSpeedLevel',
                     'display_mode'      => 'display',
                     'filter_lifetime'   => 'filter_life',
                     'air_quality'       => 'air_quality',
