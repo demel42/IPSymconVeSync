@@ -129,7 +129,7 @@ https://github.com/webdjoe/pyvesync.git
 ## 7. Versions-Historie
 
 - 1.8 @ 08.05.2024 11:21
-  - Fix: Rückmeldung der Lüfterstufen des Core*S korrigiert
+  - Fix: Übernahme der aktuellen Lüfterstufe vom Core?00S korrigiert
 
 - 1.7 @ 23.04.2024 08:06
   - Neu: Core 200S hinzugefügt
