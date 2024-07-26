@@ -84,7 +84,7 @@ class VeSyncDevice extends IPSModule
     {
         parent::__construct($InstanceID);
 
-        $this->CommonContruct(__DIR__);
+        $this->CommonConstruct(__DIR__);
     }
 
     public function __destruct()
@@ -554,7 +554,7 @@ class VeSyncDevice extends IPSModule
             }
         }
 
-        if ($options['speed_level']) {
+        if ($options['speed_level'] && $keywords['speed_level'] != 'fanSpeedLevel') {
             $speedLevel = $this->GetArrayElem($jdata, $keywords['speed_level'], '', $fnd);
             if ($fnd) {
                 $this->SendDebug(__FUNCTION__, '... SpeedLevel (' . $keywords['speed_level'] . ')=' . $speedLevel, 0);
@@ -617,6 +617,14 @@ class VeSyncDevice extends IPSModule
             if ($fnd) {
                 $this->SendDebug(__FUNCTION__, '... wifi (wifiRssi)=' . $rssi, 0);
                 $this->SaveValue('WifiStrength', $rssi, $is_changed);
+            }
+        }
+
+        if ($options['speed_level'] && $keywords['speed_level'] == 'fanSpeedLevel') {
+            $speedLevel = $this->GetArrayElem($jdata, $keywords['speed_level'], '', $fnd);
+            if ($fnd) {
+                $this->SendDebug(__FUNCTION__, '... SpeedLevel (' . $keywords['speed_level'] . ')=' . $speedLevel, 0);
+                $this->SaveValue('SpeedLevel', $speedLevel, $is_changed);
             }
         }
 
