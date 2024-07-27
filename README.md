@@ -128,7 +128,7 @@ https://github.com/webdjoe/pyvesync.git
 
 ## 7. Versions-Historie
 
-- 1.8.1 @ 08.05.2024 11:21
+- 1.8.1 @ 27.07.2024 17:51
   - Fix: Übernahme der aktuellen Lüfterstufe ("fanSpeedLevel") vom Core?00S korrigiert
   - update submodule CommonStubs
 

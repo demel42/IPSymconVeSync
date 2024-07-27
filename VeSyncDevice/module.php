@@ -615,15 +615,15 @@ class VeSyncDevice extends IPSModule
         if ($options['rssi']) {
             $rssi = (int) $this->GetArrayElem($jdata, 'deviceProp.wifiRssi', false, $fnd);
             if ($fnd) {
-                $this->SendDebug(__FUNCTION__, '... wifi (wifiRssi)=' . $rssi, 0);
+                $this->SendDebug(__FUNCTION__, '... wifi (deviceProp.wifiRssi)=' . $rssi, 0);
                 $this->SaveValue('WifiStrength', $rssi, $is_changed);
             }
         }
 
         if ($options['speed_level'] && $keywords['speed_level'] == 'fanSpeedLevel') {
-            $speedLevel = $this->GetArrayElem($jdata, $keywords['speed_level'], '', $fnd);
+            $speedLevel = $this->GetArrayElem($jdata, 'extension.fanSpeedLevel', '', $fnd);
             if ($fnd) {
-                $this->SendDebug(__FUNCTION__, '... SpeedLevel (' . $keywords['speed_level'] . ')=' . $speedLevel, 0);
+                $this->SendDebug(__FUNCTION__, '... SpeedLevel (extension.fanSpeedLevel)=' . $speedLevel, 0);
                 $this->SaveValue('SpeedLevel', $speedLevel, $is_changed);
             }
         }
