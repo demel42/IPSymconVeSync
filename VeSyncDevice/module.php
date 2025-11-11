@@ -67,6 +67,15 @@ class VeSyncDevice extends IPSModule
                 $options['air_quality'] = true;
                 $options['air_quality_value'] = true;
                 break;
+            case 'Core600S':
+                $options['power'] = true;
+                $options['work_mode0123'] = true;
+                $options['speed_level123'] = true;
+                $options['display_mode'] = true;
+                $options['filter_lifetime'] = true;
+                $options['air_quality'] = true;
+                $options['air_quality_value'] = true;
+                break;
             default:
                 $this->SendDebug(__FUNCTION__, 'unsupported model ' . $model, 0);
                 break;
@@ -440,6 +449,7 @@ class VeSyncDevice extends IPSModule
             case 'Core200S':
             case 'Core300S':
             case 'Core400S':
+            case 'Core600S':
                 $jdata = $this->CallBypassV2('getPurifierStatus', ['data' => []]);
                 break;
             default:
@@ -460,6 +470,7 @@ class VeSyncDevice extends IPSModule
             case 'Core200S':
             case 'Core300S':
             case 'Core400S':
+            case 'Core600S':
                 $sdata = [
                     'DataID'   => '{DEC26699-97AD-BBF3-1764-2E443EC8E1C4}',
                     'CallerID' => $this->InstanceID,
@@ -522,6 +533,7 @@ class VeSyncDevice extends IPSModule
             case 'Core200S':
             case 'Core300S':
             case 'Core400S':
+            case 'Core600S':
                 $keywords = [
                     'power'             => 'enabled',
                     'work_mode'         => 'mode',
@@ -734,6 +746,7 @@ class VeSyncDevice extends IPSModule
             case 'Core200S':
             case 'Core300S':
             case 'Core400S':
+            case 'Core600S':
                 $method = 'setSwitch';
                 $opts = [
                     'data' => [
@@ -779,6 +792,7 @@ class VeSyncDevice extends IPSModule
             case 'Core200S':
             case 'Core300S':
             case 'Core400S':
+            case 'Core600S':
                 if ($mode == self::$MODE_FAN_MANUAL) {
                     $method = 'setLevel';
                     $opts = [
@@ -836,6 +850,7 @@ class VeSyncDevice extends IPSModule
             case 'Core200S':
             case 'Core300S':
             case 'Core400S':
+            case 'Core600S':
                 $method = 'setLevel';
                 $opts = [
                     'data' => [
@@ -885,6 +900,7 @@ class VeSyncDevice extends IPSModule
             case 'Core200S':
             case 'Core300S':
             case 'Core400S':
+            case 'Core600S':
                 $method = 'setDisplay';
                 $opts = [
                     'data' => [

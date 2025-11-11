@@ -128,8 +128,12 @@ https://github.com/webdjoe/pyvesync.git
 
 ## 7. Versions-Historie
 
+- 1.10 @ 11.11.2025 07:50
+  - Neu: Core 600S hinzugefügt
+  - update submodule CommonStubs
+
 - 1.9 @ 03.01.2025 14:17
- - update submodule CommonStubs
+  - update submodule CommonStubs
 
 - 1.8.1 @ 27.07.2024 17:51
   - Fix: Übernahme der aktuellen Lüfterstufe ("fanSpeedLevel") vom Core?00S korrigiert
