@@ -406,14 +406,14 @@ class VeSyncIO extends IPSModule
                 $this->WriteAttributeString('AccessData', '');
             } elseif ($httpcode == 403) {
                 $statuscode = self::$IS_UNAUTHORIZED;
-                $err = 'got http-code ' . $httpcode . ' (forbidden)';
+                $err = 'got http-code ' . $httpcode . ' (unauthorized)';
                 $this->WriteAttributeString('AccessData', '');
             } elseif ($httpcode >= 500 && $httpcode <= 599) {
                 $statuscode = self::$IS_SERVERERROR;
                 $err = 'got http-code ' . $httpcode . ' (server error)';
             } elseif ($httpcode != 200) {
                 $statuscode = self::$IS_HTTPERROR;
-                $err = 'got http-code ' . $httpcode . '(' . $this->HttpCode2Text($httpcode) . ')';
+                $err = 'got http-code ' . $httpcode . ' (' . $this->HttpCode2Text($httpcode) . ')';
             }
         }
         if ($statuscode == 0) {

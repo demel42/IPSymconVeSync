@@ -392,7 +392,7 @@ class VeSyncDevice extends IPSModule
         return $formActions;
     }
 
-    private function SetUpdateInterval(int $sec = null)
+    private function SetUpdateInterval(?int $sec = null)
     {
         if ($sec == '') {
             $sec = $this->ReadPropertyInteger('update_interval');
@@ -400,7 +400,7 @@ class VeSyncDevice extends IPSModule
         $this->MaintainTimer('UpdateStatus', $sec * 1000);
     }
 
-    private function CallBypassV2(string $method, array $opts = null)
+    private function CallBypassV2(string $method, ?array $opts = null)
     {
         switch ($method) {
             case 'getPurifierStatus':

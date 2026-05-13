@@ -110,7 +110,7 @@ class VeSyncConfig extends IPSModule
         }
 
         $guid = '{BA4E3595-F713-49CD-D25D-53813601D88E}'; // VeSyncDevice
-        $instIDs = IPS_GetInstanceListByModuleID($guid);
+        $instIDs = (array) IPS_GetInstanceListByModuleID($guid);
 
         if (is_array($devices)) {
             foreach ($devices as $device) {
