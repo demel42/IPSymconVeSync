@@ -66,9 +66,9 @@ trait VeSyncLocalLib
         ];
         $this->CreateVarProfile('VeSync.OnOff', VARIABLETYPE_BOOLEAN, '', 0, 0, 0, 0, '', $associations, $reInstall);
 
-        $this->CreateVarProfile('VeSync.Wifi', VARIABLETYPE_INTEGER, ' dBm', 0, 0, 0, 0, 'Intensity', '', $reInstall);
+        $this->CreateVarProfile('VeSync.Wifi', VARIABLETYPE_INTEGER, ' dBm', 0, 0, 0, 0, 'Intensity', [], $reInstall);
 
-        $this->CreateVarProfile('VeSync.Percent', VARIABLETYPE_INTEGER, ' %', 0, 0, 0, 0, '', '', $reInstall);
+        $this->CreateVarProfile('VeSync.Percent', VARIABLETYPE_INTEGER, ' %', 0, 0, 0, 0, '', [], $reInstall);
 
         $associations = [
             ['Wert' => self::$MODE_FAN_OFF, 'Name' => $this->Translate('Off'), 'Farbe' => -1],
@@ -109,7 +109,7 @@ trait VeSyncLocalLib
         ];
         $this->CreateVarProfile('VeSync.SpeedLevel1234', VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, '', $associations, $reInstall);
 
-        $this->CreateVarProfile('VeSync.PM25', VARIABLETYPE_INTEGER, ' µg/m³', 0, 0, 0, 0, 'Snow', '', $reInstall);
+        $this->CreateVarProfile('VeSync.PM25', VARIABLETYPE_INTEGER, ' µg/m³', 0, 0, 0, 0, 'Snow', [], $reInstall);
 
         $associations = [
             ['Wert' => 1, 'Name' => $this->Translate('Very good'), 'Farbe' => 0x228B22],	// PM < 15
@@ -120,7 +120,7 @@ trait VeSyncLocalLib
         ];
         $this->CreateVarProfile('VeSync.AQLevel', VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, 'Gauge', $associations, $reInstall);
 
-        $this->CreateVarProfile('VeSync.AQValue', VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, 'Gauge', '', $reInstall);
+        $this->CreateVarProfile('VeSync.AQValue', VARIABLETYPE_INTEGER, '', 0, 0, 0, 0, 'Gauge', [], $reInstall);
     }
 
     private function DeviceType2Model($deviceType)

@@ -128,6 +128,9 @@ https://github.com/webdjoe/pyvesync.git
 
 ## 7. Versions-Historie
 
+- 1.12 @ 09.11.2026 17:20
+  - Fix: Anpassung an geänderte API
+
 - 1.11 @ 11.05.2026 15:02
   - Fix: Änderung von deprecated php code
   - update submodule CommonStubs
